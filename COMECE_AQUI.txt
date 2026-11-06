@@ -1,0 +1,24 @@
+FUSION MK XIV
+
+1. Abra JARVIS_FUSION_MK_XIV.html no navegador.
+   Nenhuma instalacao e necessaria para abrir o aplicativo.
+
+2. Clique em Conectar IA > OpenRouter.
+   Gere uma chave da sua conta: https://openrouter.ai/settings/keys
+   Cole no campo de conexao, mantenha openrouter/free e conecte.
+   As variantes gratuitas possuem cotas e disponibilidade limitadas.
+
+3. Escolha JARVIS, Sexta-feira, EDITH ou Ultron e converse.
+   Os quatro usam o modelo conectado, com estilos diferentes.
+
+4. Antes de fechar, use Conversas e dados > Exportar backup.
+   A sessao e temporaria por padrao. Reanexe imagens ao abrir outra sessao.
+
+GUIA COMPLETO: docs/GUIA_ATIVACAO_JARVIS_MK_XIV.pdf
+FONTES E OPCOES: README.md
+
+INICIAR_JARVIS.bat apenas abre o HTML.
+INICIAR_SERVIDOR_OPCIONAL.bat e um modo avancado separado, que exige Python.
+Nao e necessario usar o servidor para conversar pela API diretamente.
+
+Nenhuma chave real acompanha este pacote. Nao compartilhe suas chaves.
