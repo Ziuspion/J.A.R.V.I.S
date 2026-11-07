@@ -13,7 +13,7 @@ from pathlib import Path
 from urllib.parse import urlparse
 
 ROOT = Path(__file__).resolve().parents[1]
-VERSION = "14.0.0"
+VERSION = "15.0.0"
 
 
 class UserError(Exception):
@@ -38,7 +38,11 @@ def load_env(path=ROOT / ".env"):
 
 
 def api_url(value):
-    p = urlparse(value)
+    try:
+        p = urlparse(value)
+        p.port
+    except (ValueError, TypeError):
+        raise UserError("Endereço de API inválido em .env.") from None
     if p.username or p.password or p.query or p.fragment or not p.hostname:
         raise UserError("Endereço de API inválido em .env.")
     if p.scheme != "https" and not (p.scheme == "http" and p.hostname in {"localhost", "127.0.0.1", "::1"}):
@@ -48,20 +52,38 @@ def api_url(value):
 
 def cfg():
     provider = os.getenv("AI_PROVIDER", "local").lower().strip()
-    options = {
-        "local": ("", "", "Comandos locais"),
-        "ollama": (os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434/v1"), "ollama", os.getenv("OLLAMA_MODEL", "qwen3:1.7b")),
-        "openrouter": ("https://openrouter.ai/api/v1", os.getenv("OPENROUTER_API_KEY", ""), (os.getenv("AI_MODEL") or "openrouter/free")),
-        "lovable": ("https://ai.gateway.lovable.dev/v1", os.getenv("LOVABLE_API_KEY", ""), os.getenv("AI_MODEL", "")),
-        "compatible": (os.getenv("AI_BASE_URL", ""), os.getenv("AI_API_KEY", ""), os.getenv("AI_MODEL", "")),
-    }
-    if provider not in options:
-        raise UserError("AI_PROVIDER deve ser local, ollama, openrouter, lovable ou compatible.")
-    base, key, model = options[provider]
+    catalog = json.loads((ROOT / "api-presets.json").read_text("utf-8"))
+    if provider == "local":
+        return {"provider": provider, "base": "", "key": "", "model": "IA generativa não configurada", "ready": False, "protocol": "chat", "auth": "none"}
+    if provider == "lovable":
+        preset = {"base": "https://ai.gateway.lovable.dev/v1", "env": "LOVABLE_API_KEY", "protocol": "chat", "auth": "bearer"}
+    elif provider in catalog and provider != "server":
+        preset = catalog[provider]
+    else:
+        raise UserError("AI_PROVIDER inválido. Consulte api-presets.json ou use compatible.")
+    # Mantém o contrato da instalação Ollama antiga; o modo nativo é opt-in.
+    if provider == "ollama":
+        preset = {**preset, "base": os.getenv("OLLAMA_BASE_URL", "http://127.0.0.1:11434/v1"), "protocol": "chat", "auth": "bearer"}
+    base = os.getenv("AI_BASE_URL") or preset.get("base", "")
+    key = os.getenv(preset.get("env", "AI_API_KEY"), "") or os.getenv("AI_API_KEY", "") or ("ollama" if provider == "ollama" else "")
+    model = os.getenv("AI_MODEL") or (os.getenv("OLLAMA_MODEL", "qwen3:1.7b") if provider == "ollama" else preset.get("model", ""))
+    protocol = os.getenv("AI_PROTOCOL") or preset.get("protocol", "chat")
+    auth = os.getenv("AI_AUTH") or preset.get("auth", "bearer")
+    token_param = os.getenv("AI_TOKEN_PARAM") or preset.get("tokenParam", "max_tokens")
+    system_role = os.getenv("AI_SYSTEM_ROLE", "system")
+    if token_param not in {"max_tokens", "max_completion_tokens", "none"} or system_role not in {"system", "developer", "user"}:
+        raise UserError("AI_TOKEN_PARAM ou AI_SYSTEM_ROLE inválido.")
+    if protocol not in {"chat", "responses", "anthropic", "gemini", "ollama"} or auth not in {"bearer", "anthropic", "google", "api-key", "none"}:
+        raise UserError("AI_PROTOCOL ou AI_AUTH inválido.")
     if base:
-        base = api_url(base)
-    return {"provider": provider, "base": base, "key": key, "model": model,
-            "ready": provider != "local" and bool(base and key and model)}
+        base = api_url(base).rstrip('/')
+        suffix = {"chat":"/chat/completions", "responses":"/responses", "anthropic":"/messages", "ollama":"/api/chat"}.get(protocol)
+        if suffix and base.endswith(suffix):
+            base = base[:-len(suffix)]
+        if protocol == "ollama" and base.endswith(("/api", "/v1")):
+            base = base.rsplit('/', 1)[0]
+    return {"provider": provider, "base": base, "key": key, "model": model, "protocol": protocol, "auth": auth, "tokenParam": token_param, "systemRole": system_role,
+            "ready": bool(base and model and (key or auth == "none"))}
 
 
 def public_config():
@@ -85,10 +107,27 @@ def home_entities():
 
 
 def validate_workspace(value):
+    # Rejeita campos de conexão e números que o JSON do navegador não representa.
+    def inspect(item):
+        if isinstance(item, dict):
+            if any(str(k).lower().replace("_", "") in {"apikey", "secret", "token", "key", "connection", "credentials"} for k in item):
+                raise UserError("Chaves e conexões não podem ser incluídas no backup.")
+            for child in item.values():
+                inspect(child)
+        elif isinstance(item, list):
+            for child in item:
+                inspect(child)
+    try:
+        encoded = json.dumps(value, ensure_ascii=False, allow_nan=False).encode()
+        inspect(value)
+    except (ValueError, TypeError, RecursionError):
+        raise UserError("Backup contém valores inválidos.") from None
+    if len(encoded) > 4 * 1024 * 1024:
+        raise UserError("O backup excede 4 MB.", 413)
     if isinstance(value, dict) and value.get("version") == 3:
         return validate_legacy_workspace(value)
     if not isinstance(value, dict) or value.get("version") != 4:
-        raise UserError("Backup Fusion inválido.")
+        raise UserError("Backup J.A.R.V.I.S. inválido.")
     if not isinstance(value.get("settings"), dict) or not isinstance(value.get("threads"), list):
         raise UserError("Preferências ou conversas inválidas.")
     if any(k in value["settings"] for k in ("apiKey", "api_key", "key", "secret", "token")):

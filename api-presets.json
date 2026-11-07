@@ -1,0 +1,249 @@
+{
+  "openrouter": {
+    "name": "OpenRouter · modelos gratuitos",
+    "base": "https://openrouter.ai/api/v1",
+    "model": "openrouter/free",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "OPENROUTER_API_KEY",
+    "keyURL": "https://openrouter.ai/settings/keys",
+    "docsURL": "https://openrouter.ai/docs/quickstart"
+  },
+  "gemini": {
+    "name": "Google Gemini",
+    "base": "https://generativelanguage.googleapis.com/v1beta",
+    "model": "",
+    "protocol": "gemini",
+    "auth": "google",
+    "env": "GEMINI_API_KEY",
+    "keyURL": "https://aistudio.google.com/apikey",
+    "docsURL": "https://ai.google.dev/gemini-api/docs"
+  },
+  "openai": {
+    "name": "OpenAI",
+    "base": "https://api.openai.com/v1",
+    "model": "",
+    "protocol": "responses",
+    "auth": "bearer",
+    "env": "OPENAI_API_KEY",
+    "keyURL": "https://platform.openai.com/api-keys",
+    "docsURL": "https://developers.openai.com/api/docs"
+  },
+  "anthropic": {
+    "name": "Anthropic · Claude",
+    "base": "https://api.anthropic.com/v1",
+    "model": "",
+    "protocol": "anthropic",
+    "auth": "anthropic",
+    "env": "ANTHROPIC_API_KEY",
+    "keyURL": "https://platform.claude.com/settings/keys",
+    "docsURL": "https://platform.claude.com/docs"
+  },
+  "deepseek": {
+    "name": "DeepSeek",
+    "base": "https://api.deepseek.com/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "DEEPSEEK_API_KEY",
+    "docsURL": "https://api-docs.deepseek.com/"
+  },
+  "groq": {
+    "name": "Groq",
+    "base": "https://api.groq.com/openai/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "GROQ_API_KEY",
+    "docsURL": "https://console.groq.com/docs/openai"
+  },
+  "mistral": {
+    "name": "Mistral AI",
+    "base": "https://api.mistral.ai/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "MISTRAL_API_KEY",
+    "docsURL": "https://docs.mistral.ai/"
+  },
+  "xai": {
+    "name": "xAI · Grok",
+    "base": "https://api.x.ai/v1",
+    "model": "",
+    "protocol": "responses",
+    "auth": "bearer",
+    "env": "XAI_API_KEY",
+    "docsURL": "https://docs.x.ai/"
+  },
+  "together": {
+    "name": "Together AI",
+    "base": "https://api.together.ai/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "TOGETHER_API_KEY",
+    "docsURL": "https://docs.together.ai/docs/openai-api-compatibility"
+  },
+  "fireworks": {
+    "name": "Fireworks AI",
+    "base": "https://api.fireworks.ai/inference/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "FIREWORKS_API_KEY",
+    "docsURL": "https://docs.fireworks.ai/tools-sdks/openai-compatibility"
+  },
+  "cerebras": {
+    "name": "Cerebras",
+    "base": "https://api.cerebras.ai/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "CEREBRAS_API_KEY",
+    "tokenParam": "max_completion_tokens",
+    "docsURL": "https://inference-docs.cerebras.ai/"
+  },
+  "huggingface": {
+    "name": "Hugging Face · Inference Providers",
+    "base": "https://router.huggingface.co/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "HF_TOKEN",
+    "docsURL": "https://huggingface.co/docs/inference-providers"
+  },
+  "cohere": {
+    "name": "Cohere · API compatível",
+    "base": "https://api.cohere.ai/compatibility/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "COHERE_API_KEY",
+    "docsURL": "https://docs.cohere.com/docs/compatibility-api"
+  },
+  "deepinfra": {
+    "name": "DeepInfra",
+    "base": "https://api.deepinfra.com/v1/openai",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "DEEPINFRA_API_KEY",
+    "docsURL": "https://deepinfra.com/docs/openai_api"
+  },
+  "nvidia": {
+    "name": "NVIDIA · API Catalog",
+    "base": "https://integrate.api.nvidia.com/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "NVIDIA_API_KEY",
+    "docsURL": "https://build.nvidia.com/"
+  },
+  "zai": {
+    "name": "Z.ai · API geral",
+    "base": "https://api.z.ai/api/paas/v4",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "ZAI_API_KEY",
+    "docsURL": "https://docs.z.ai/"
+  },
+  "minimax": {
+    "name": "MiniMax",
+    "base": "https://api.minimax.io/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "MINIMAX_API_KEY",
+    "tokenParam": "max_completion_tokens",
+    "docsURL": "https://platform.minimax.io/docs/"
+  },
+  "alibaba": {
+    "name": "Alibaba Cloud · Model Studio",
+    "base": "",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "DASHSCOPE_API_KEY",
+    "docsURL": "https://www.alibabacloud.com/help/en/model-studio/"
+  },
+  "perplexity": {
+    "name": "Perplexity · Agent API / Responses",
+    "base": "https://api.perplexity.ai/v1",
+    "model": "",
+    "protocol": "responses",
+    "auth": "bearer",
+    "env": "PERPLEXITY_API_KEY",
+    "docsURL": "https://docs.perplexity.ai/docs/agent-api/openai-compatibility"
+  },
+  "cloudflare": {
+    "name": "Cloudflare · Workers AI",
+    "base": "",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "CLOUDFLARE_API_TOKEN",
+    "docsURL": "https://developers.cloudflare.com/workers-ai/configuration/open-ai-compatibility/"
+  },
+  "sambanova": {
+    "name": "SambaNova Cloud",
+    "base": "https://api.sambanova.ai/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "SAMBANOVA_API_KEY",
+    "docsURL": "https://docs.sambanova.ai/docs/en/get-started/quickstart"
+  },
+  "novita": {
+    "name": "Novita AI",
+    "base": "https://api.novita.ai/openai/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "NOVITA_API_KEY",
+    "docsURL": "https://docs.novita.ai/api-reference/model-apis-llm-create-chat-completion"
+  },
+  "azure": {
+    "name": "Azure OpenAI · v1",
+    "base": "",
+    "model": "",
+    "protocol": "responses",
+    "auth": "api-key",
+    "env": "AZURE_OPENAI_API_KEY",
+    "docsURL": "https://learn.microsoft.com/azure/ai-foundry/openai/how-to/switching-endpoints"
+  },
+  "ollama": {
+    "name": "Ollama · serviço local existente",
+    "base": "http://127.0.0.1:11434",
+    "model": "",
+    "protocol": "ollama",
+    "auth": "none",
+    "local": true,
+    "docsURL": "https://docs.ollama.com/api/chat"
+  },
+  "lmstudio": {
+    "name": "LM Studio · serviço local existente",
+    "base": "http://127.0.0.1:1234/v1",
+    "model": "",
+    "protocol": "chat",
+    "auth": "none",
+    "local": true,
+    "docsURL": "https://lmstudio.ai/docs/developer/openai-compat"
+  },
+  "compatible": {
+    "name": "Personalizada · cinco protocolos",
+    "base": "",
+    "model": "",
+    "protocol": "chat",
+    "auth": "bearer",
+    "env": "AI_API_KEY",
+    "docsURL": "https://developers.openai.com/api/docs"
+  },
+  "server": {
+    "name": "Servidor opcional deste projeto",
+    "base": "",
+    "model": "",
+    "protocol": "server",
+    "auth": "none"
+  }
+}

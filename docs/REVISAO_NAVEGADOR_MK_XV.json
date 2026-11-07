@@ -1,0 +1,273 @@
+{
+  "environment": "Chromium; viewports, not physical devices",
+  "responsive": [
+    {
+      "size": "190,300",
+      "data": {
+        "body": 190,
+        "cards": [
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          },
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          },
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          },
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          },
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          },
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          },
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          },
+          {
+            "artHeight": 116,
+            "artWidth": 116,
+            "width": 138
+          }
+        ],
+        "scroll": 190
+      }
+    },
+    {
+      "size": "390,800",
+      "data": {
+        "body": 390,
+        "cards": [
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          },
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          },
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          },
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          },
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          },
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          },
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          },
+          {
+            "artHeight": 138,
+            "artWidth": 138,
+            "width": 160
+          }
+        ],
+        "scroll": 390
+      }
+    },
+    {
+      "size": "768,1024",
+      "data": {
+        "body": 768,
+        "cards": [
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          },
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          },
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          },
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          },
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          },
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          },
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          },
+          {
+            "artHeight": 182,
+            "artWidth": 182,
+            "width": 214
+          }
+        ],
+        "scroll": 768
+      }
+    },
+    {
+      "size": "1363,936",
+      "data": {
+        "body": 1363,
+        "cards": [
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          },
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          },
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          },
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          },
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          },
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          },
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          },
+          {
+            "artHeight": 248.5,
+            "artWidth": 248.5,
+            "width": 280.5
+          }
+        ],
+        "scroll": 1363
+      }
+    }
+  ],
+  "themes": [
+    {
+      "accent": "#7ce8f2",
+      "background": "#040e15",
+      "identity": "jarvis",
+      "name": "J.A.R.V.I.S.",
+      "svg": "xMidYMid meet",
+      "title": "Às suas ordens, senhor."
+    },
+    {
+      "accent": "#ff9a43",
+      "background": "#100b08",
+      "identity": "friday",
+      "name": "F.R.I.D.A.Y.",
+      "svg": "xMidYMid meet",
+      "title": "Vamos encontrar a melhor jogada."
+    },
+    {
+      "accent": "#e9c568",
+      "background": "#121108",
+      "identity": "vision",
+      "name": "VISÃO",
+      "svg": "xMidYMid meet",
+      "title": "Podemos pensar nisso juntos."
+    },
+    {
+      "accent": "#ff5262",
+      "background": "#110608",
+      "identity": "ultron",
+      "name": "ULTRON",
+      "svg": "xMidYMid meet",
+      "title": "Ah, caralho. Você de novo."
+    },
+    {
+      "accent": "#d2996c",
+      "background": "#151009",
+      "identity": "veronica",
+      "name": "V.E.R.O.N.I.C.A.",
+      "svg": "xMidYMid meet",
+      "title": "Verônica em prontidão. Qual é a situação?"
+    },
+    {
+      "accent": "#6998ff",
+      "background": "#070e21",
+      "identity": "karen",
+      "name": "K.A.R.E.N.",
+      "svg": "xMidYMid meet",
+      "title": "Estou aqui. Vamos cuidar disso juntos?"
+    },
+    {
+      "accent": "#79b6ff",
+      "background": "#071124",
+      "identity": "edith",
+      "name": "E.D.I.T.H.",
+      "svg": "xMidYMid meet",
+      "title": "Pronto para sair do tédio?"
+    },
+    {
+      "accent": "#c67aff",
+      "background": "#10091c",
+      "identity": "iris",
+      "name": "I.R.I.S.",
+      "svg": "xMidYMid meet",
+      "title": "Estou com você. Qual é a nossa próxima ideia?"
+    }
+  ],
+  "tvKeyboard": "Right arrow moved focus from Preferences to a main-area Copy control",
+  "portableExports": {
+    "pdf": "Opened and extracted expected conversation",
+    "docx": "Valid ZIP; expected text present",
+    "xlsx": "Valid ZIP; literal =1+1, no formula element"
+  }
+}

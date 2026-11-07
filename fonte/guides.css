@@ -1,0 +1,34 @@
+/* O lançador tem espaço próprio no rodapé; ele não cobre o campo de mensagem. */
+
+.guide-launcher{position:fixed;right:15px;bottom:5px;z-index:30;display:flex;flex-direction:column;align-items:center;justify-content:center;width:56px;height:48px;padding:0;border:0;border-radius:50%;background:none;color:#a7afb4;cursor:pointer}
+.guide-launcher>img{display:block;width:44px;height:44px;object-fit:contain;transition:opacity .2s ease;opacity:.87}
+.guide-launcher:hover>img,.guide-launcher[aria-expanded=true]>img{opacity:1}.guide-launcher-label{position:absolute;bottom:-2px;font:400 6px var(--hud-font);letter-spacing:1.4px;color:#a3abb0;background:#060c11d9;padding:1px 5px;line-height:1.4}
+.guide-launcher:focus-visible{outline:2px solid #b8c0c5;outline-offset:4px}
+.guide-panel{--accent:#bdc4c8;--rgb:189,196,200;--secondary:#a0a8ae;--line:#9da6ae33;color-scheme:dark;position:fixed;inset:auto 15px 70px auto;width:370px;height:min(550px,calc(100dvh - 86px));max-width:calc(100vw - 26px);max-height:calc(100dvh - 86px);margin:0;padding:0;background:linear-gradient(145deg,#1a2025,#10161c 65%);color:#d4dade;border:1px solid #949da65c;border-radius:4px;box-shadow:0 18px 70px #0009;z-index:40;overflow:hidden}
+.guide-panel:not([open]){display:none}.guide-panel[open]{display:flex;flex-direction:column}
+.guide-header{display:flex;align-items:center;gap:10px;padding:12px 13px 11px;border-bottom:1px solid #929ca52b;flex:none;background:#a6aeb404}
+.guide-avatar{width:45px;height:45px;object-fit:contain;flex:none}
+.guide-header>div{min-width:0;flex:1}.guide-header small{font:400 6px var(--hud-font);letter-spacing:1.4px;color:#9ba4ac}
+.guide-header h2{font:500 17px var(--hud-font);letter-spacing:1.4px;color:#d3d8dc;margin:4px 0 0}
+.guide-icon{display:grid;place-items:center;width:26px;height:29px;padding:5px;background:none;color:#9da8b1;border:0;border-radius:2px}
+.guide-icon:hover{color:#e3e6e9;background:#bfc8cf0c}.guide-icon svg{width:15px;height:15px}
+.guide-greeting{font-size:13px;line-height:1.8;margin:0;padding:15px 17px 13px;color:#d5dade;flex:none;background:#b5bcc404;border-bottom:1px solid #9aa5ad18}
+.guide-topics{display:flex;flex-wrap:wrap;gap:6px;padding:12px 15px 11px;flex:none}
+.guide-topics>button{font-size:10px;line-height:1.4;color:#b8c1c8;background:#a5adb60a;border:1px solid #97a2ab3d;padding:7px 9px;border-radius:2px}
+.guide-topics>button:hover{background:#a5adb619;border-color:#b8c2c96b;color:#e1e5e8}
+.guide-messages{flex:1;min-height:50px;overflow:auto;padding:4px 15px 12px;scrollbar-width:thin;scrollbar-color:#68717a transparent;overscroll-behavior:contain}
+.guide-message{padding:11px 12px;margin:0 0 10px;border:1px solid #929ea72b;background:#070d122b;border-radius:2px}
+.guide-message.user{border-color:#a8b1b93b;background:#acb5bd08;margin-left:21px}
+.guide-message-name{display:block;font:400 8px var(--hud-font);letter-spacing:1.4px;color:#a0acb5;margin-bottom:7px}
+.guide-message>p{font:400 12px/1.85 var(--sans);color:#c2cbd2;white-space:pre-wrap;overflow-wrap:anywhere;margin:0}
+.guide-message.user>p{color:#dde2e6}.guide-message.user>.guide-message-name{color:#bec6cc}
+.guide-action{display:flex;align-items:center;justify-content:center;font:400 8px var(--hud-font);letter-spacing:.65px;border:1px solid #a5afb740;background:#b7bfc50a;border-radius:2px;color:#c4cdd3;padding:9px 11px;margin-top:12px;max-width:100%;line-height:1.6;text-align:center}
+.guide-action:hover{border-color:#c0c9d070;background:#b7bfc516;color:#e5e9ec}
+.guide-form{display:flex;gap:7px;align-items:center;margin:0 13px;padding:9px 9px 9px 12px;border:1px solid #a9b2ba48;flex:none;background:#0b1218;border-radius:2px}
+.guide-form:focus-within{border-color:#b9c3cc8c}.guide-form>input{font:400 12px/1.65 var(--sans);min-width:0;flex:1;outline:none!important;background:none;border:0;padding:3px 0;color:#dbe1e5;border-radius:0;box-shadow:none}
+.guide-form>input::placeholder{color:#7f8d98}.guide-form>button{display:grid;place-items:center;width:28px;height:28px;padding:6px;border:1px solid #aeb8c14a;background:#aeb8c110;color:#bac4cc;border-radius:2px}
+.guide-form>button:hover{background:#aeb8c124}.guide-form>button>svg{width:15px;height:15px}
+.guide-footnote{flex:none;color:#85919b;font:400 8px/1.6 var(--sans);padding:8px 15px 10px;margin:0;text-align:center}
+.guide-panel :is(button,input):focus-visible{outline:2px solid #bdc6ce;outline-offset:3px}
+
+@media(max-width:680px){.guide-launcher{right:10px;bottom:7px}.guide-panel{inset:auto 12px 72px auto;max-height:calc(100dvh - 88px);height:min(550px,calc(100dvh - 88px));width:360px;max-width:calc(100vw - 24px)}}

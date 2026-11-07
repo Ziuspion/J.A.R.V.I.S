@@ -1,71 +1,119 @@
-"""Gera uma aplicação completa em UM HTML, sem instalar dependências."""
+"""Compila a aplicação em um HTML autônomo, sem dependências externas."""
 from pathlib import Path
-from math import sin,cos,pi
-import json
-ROOT=Path(__file__).resolve().parent
+import json, base64, hashlib, shutil
+ROOT = Path(__file__).resolve().parent
 
-def path_arc(r,a,b,cx=300,cy=300):
- return f'M{cx+cos(a)*r:.2f},{cy+sin(a)*r:.2f} A{r} {r} 0 0 1 {cx+cos(b)*r:.2f},{cy+sin(b)*r:.2f}'
-def circle(r,klass='soft',width=1):return f'<circle cx="300" cy="300" r="{r}" class="{klass}" stroke-width="{width}"/>'
-def ticks(r,count=96,large=10,small=4):
- out=[]
- for i in range(count):
-  a=i*2*pi/count;rr=r+(large if i%8==0 else small)
-  out.append(f'<path d="M{300+cos(a)*r:.2f},{300+sin(a)*r:.2f} {300+cos(a)*rr:.2f},{300+sin(a)*rr:.2f}"/>')
- return ''.join(out)
-def svg(kind):
- out=[f'<svg class="core-art core-{kind}" viewBox="0 0 600 600" aria-hidden="true"><g class="subtle" stroke-width=".7"><path d="M300 23v26m0 502v26M23 300h27m500 0h27"/><path d="M67 139h30l23 23m413-23h-30l-23 23M67 461h30l23-23m413 23h-30l-23-23"/></g>']
- if kind=='jarvis':
-  out.extend([circle(247,'subtle',.7),circle(229,'soft',1),'<g class="rotor-a glow-line" stroke-width="3">'])
-  for i in range(10):out.append(f'<path d="{path_arc(238,i*pi/5+.035,i*pi/5+.52)}" opacity="{.8 if i%3 else .3}"/>')
-  out.extend(['</g><g class="soft" stroke-width=".85">',ticks(219,96,11,4),'</g>',circle(196,'band',27),'<g class="rotor-b" stroke-width="1">'])
-  for i in range(64):
-   a=i*pi/32;r=184;rr=207
-   out.append(f'<path class="soft" d="M{300+cos(a)*r:.2f},{300+sin(a)*r:.2f} {300+cos(a)*rr:.2f},{300+sin(a)*rr:.2f}"/>')
-  out.extend(['</g>',circle(177,'bright glow-line',3),circle(169,'soft',1),'<g class="rotor-a subtle">'])
-  for i in range(48):out.append(f'<rect x="296" y="140" width="8" height="12" rx="2" transform="rotate({i*7.5} 300 300)"/>')
-  out.extend(['</g>',circle(143,'soft',1),circle(125,'subtle',1),'<g class="rotor-b secondary" stroke-width="3">'])
-  for a,b in [(-2.9,-2.0),(.5,.84)]:out.append(f'<path d="{path_arc(185,a,b)}"/>')
-  out.extend(['</g><g class="subtle" stroke-width=".6"><path d="M215 259h28l15-15h84l19 19h31m-164 85h22l14 15h74l17-17h31M231 230h44m54 0h29M245 383h108"/><circle cx="249" cy="348" r="3"/><circle cx="359" cy="263" r="3"/></g><text class="core-word" x="300" y="312">J.A.R.V.I.S.</text><text class="core-subtitle" x="300" y="339">PERSONAL INTELLIGENCE</text>'])
- elif kind=='friday':
-  out.extend([circle(240,'subtle',1),'<g class="rotor-a bright" stroke-width="7">'])
-  for a,b in [(-1.53,-.14),(.07,1.4),(1.63,2.94),(3.23,4.58)]:out.append(f'<path d="{path_arc(233,a,b)}"/>')
-  out.extend(['</g><g class="soft" stroke-width="1">',ticks(206,48,16,8),'</g>',circle(181,'soft',1),'<g class="rotor-b" stroke-width="28">'])
-  for i in range(24):
-   if i in (4,5,15):continue
-   out.append(f'<path class="{ "bright" if i%7 else "band"}" d="{path_arc(171,i*pi/12+.015,i*pi/12+.235)}"/>')
-  out.extend(['</g>',circle(148,'bright glow-line',8),circle(130,'soft',1),circle(116,'subtle',1),circle(100,'subtle',1),'<path class="secondary" stroke-width="3" d="'+path_arc(190,-3.05,-1.0)+'"/>'])
-  for i in range(4):out.append(f'<circle class="core-fill" cx="{300+cos(-2.55+i*.045)*218:.1f}" cy="{300+sin(-2.55+i*.045)*218:.1f}" r="3"/>')
-  out.extend(['<text class="core-word" x="300" y="311">F.R.I.D.A.Y.</text><text class="core-subtitle" x="300" y="338">READY WHEN YOU ARE</text>'])
- elif kind=='edith':
-  out.extend(['<g class="soft" stroke-width="1"><path d="M36 190v-32h95m338 0h95v32M36 403v35h95m338 0h95v-35M46 184h118l19-15h233l19 15h119M46 412h118l19 15h233l19-15h119"/><rect x="194" y="191" width="212" height="215" rx="5"/><path d="M186 191v215m228-215v215"/></g><g class="bright glow-line" stroke-width="2"><path d="M40 215v-27h34m452 0h34v27M40 385v27h34m452 0h34v-27"/></g>'])
-  for cx in [118,482]:
-   for r,o in [(74,.2),(64,.5),(49,.2),(35,.6),(22,.25)]:out.append(f'<circle cx="{cx}" cy="300" r="{r}" opacity="{o}" stroke-width="1"/>')
-   out.append(f'<circle class="scan-ring" cx="{cx}" cy="300" r="59" stroke-dasharray="4 9" stroke-width="3" opacity=".55"/>')
-   for i in range(24):
-    a=i*pi/12;out.append(f'<path class="subtle" d="M{cx+cos(a)*68:.2f},{300+sin(a)*68:.2f} {cx+cos(a)*76:.2f},{300+sin(a)*76:.2f}"/>')
-   out.append(f'<path class="secondary soft" d="M{cx-16} 300h32m-16-16v32"/>')
-  out.append('<g class="holo-face" stroke-width="1"><path d="M300 213C264 213 245 243 248 281L255 330 274 363 300 378 326 363 345 330 352 281C355 243 336 213 300 213Z"/><path d="M252 260q48-25 96 0M249 281q51-24 102 0M253 304q47-13 94 0M258 326q42-12 84 0M271 349q29-7 58 0M300 214v164M280 218q-18 71 4 149m36-149q18 71-4 149M261 238q-4 54 11 104m67-104q4 54-11 104"/><path class="bright" d="m265 281 19-3m32 0 19 3M300 282l-8 35h16m-25 24q17 6 34 0"/><path d="m256 269 25-9 19 12 19-12 25 9M256 320l24-16 20 12 20-12 24 16M271 349l29-22 29 22"/></g><g class="soft secondary" stroke-width="1">')
-  for sign in [-1,1]:
-   points=[]
-   for i in range(101):
-    x=65+i*4.7;y=459+sin(i*.20+sign*.7)*7*sign;points.append(f'{x:.1f},{y:.1f}')
-   out.append('<polyline points="'+' '.join(points)+'"/>')
-  out.extend(['</g><text class="core-word" x="300" y="511">E.D.I.T.H.</text><text class="core-subtitle" x="300" y="535">TACTICAL CLARITY</text>'])
- elif kind=='ultron':
-  out.extend([circle(239,'subtle',1),'<g class="rotor-a soft" stroke-width="2">'])
-  for i in range(12):out.append(f'<path d="{path_arc(227,i*pi/6+.04,i*pi/6+.43)}"/>')
-  out.extend(['</g><g class="subtle" stroke-width=".8">',ticks(241,72,10,4),'</g><path class="soft" d="m300 76 194 112v224L300 524 106 412V188Z"/><g class="metal-face" stroke-width="1.1"><path class="face-shell" d="m300 121 77 33 34 68-6 118-38 77-67 42-67-42-38-77-6-118 34-68Z"/><path d="m300 121-22 77 22 48 22-48-22-77m-77 33 55 44-58 42-31-18m188-68-55 44 58 42 31-18M220 240l18 79 39 22 23-35 23 35 39-22 18-79M195 340l43-21-5 98m172-77-43-21 5 98M238 319l-8-53m132 53 8-53M277 341l-12 43 35 19 35-19-12-43M265 384l-7 29 42 23 42-23-7-29M233 417l25-4m109 4-25-4"/><path class="eyes" d="m225 265 58 16-12 14-40-11Zm150 0-58 16 12 14 40-11Z"/><path class="jaw" d="M279 363h42m-46 9h50m-45 9h40"/></g><text class="core-word" x="300" y="506">ULTRON</text><text class="core-subtitle" x="300" y="531">PRECISION ENGINE</text>'])
- out.append('</svg>');return ''.join(out)
+def life_svg(kind):
+    """Camadas 2D leves; o CSS controla visibilidade e movimento."""
+    if kind in ('karen', 'iris'):
+        points = [(300,194),(386,243),(386,348),(300,397),(212,348),(212,243)]
+        nodes = ''.join(f'<circle class="sensor-node" cx="{x}" cy="{y}" r="4.3" style="--node-delay:-{i*.8:.1f}s"/>' for i,(x,y) in enumerate(points))
+        return f'''<g class="core-life new-life sensor-life {kind}-life" fill="none" aria-hidden="true">
+          <g class="sensor-track"><circle cx="300" cy="300" r="234" stroke-dasharray="9 91" pathLength="100"/><circle cx="300" cy="300" r="204" stroke-dasharray="3 47 3 47" pathLength="100"/></g>
+          <g class="sensor-sweep"><path d="M300 300 405 237A123 123 0 0 1 418 336Z" class="sensor-sector"/><path d="M300 300 405 237"/></g>
+          <circle class="sensor-link" cx="300" cy="296" r="101" pathLength="100" stroke-dasharray="6 94"/>
+          <circle class="sensor-heart" cx="300" cy="296" r="22"/>{nodes}
+        </g>'''
+    if kind == 'veronica':
+        return '''<g class="core-life new-life veronica-life" fill="none" aria-hidden="true">
+          <g class="contingency-track"><circle cx="300" cy="300" r="235" pathLength="100" stroke-dasharray="5 20 5 20 5 20 5 20"/><circle cx="300" cy="300" r="248" pathLength="100" stroke-dasharray="1 24 1 24 1 24 1 24"/></g>
+          <g class="contingency-scan"><path d="M242 210v-15h22m72 0h22v15M242 394v15h22m72 0h22v-15"/><path d="M259 269h82" class="contingency-line"/></g>
+          <path class="contingency-flow" d="M300 251v112" pathLength="100" stroke-dasharray="15 85"/>
+          <circle class="contingency-beacon" cx="300" cy="342" r="10"/>
+        </g>'''
+    if kind == 'vision':
+        return '''<g class="core-life new-life vision-life" fill="none" aria-hidden="true">
+          <g class="vision-orbit"><circle cx="300" cy="300" r="238" pathLength="100" stroke-dasharray="12 38 12 38"/><circle cx="300" cy="300" r="213" pathLength="100" stroke-dasharray="1 24 1 24 1 24 1 24"/></g>
+          <path class="vision-diamond" d="m300 221 23 23-23 23-23-23Z"/>
+          <path class="vision-thought" d="M300 244h-55l-25-25m80 25h55l25-25" pathLength="100" stroke-dasharray="8 92"/>
+          <circle class="vision-pulse" cx="300" cy="244" r="31"/>
+        </g>'''
+    if kind == 'edith':
+        return '''<g class="core-life edith-life" fill="none" aria-hidden="true">
+          <circle class="life-orbit edith-orbit" cx="300" cy="300" r="239" pathLength="100"/>
+          <g class="edith-focus"><path d="M180 276v-19h22m211-9h20v20M191 345v20h22m193-19h20v-21"/><path class="edith-crosshair" d="M282 292h12m-6-6v12m56-12h12m-6-6v12"/></g>
+          <g class="edith-reflection"><path d="m219 277 31 66m-17-71 31 66m66-83 31 66"/></g>
+          <circle class="life-node edith-node" cx="215" cy="268" r="2.7" style="--life-delay:-.8s"/>
+          <circle class="life-node edith-node" cx="404" cy="340" r="2.7" style="--life-delay:-2.2s"/>
+          <path class="edith-signal" d="M171 220h27m203 169h26"/>
+        </g>'''
+    if kind == 'ultron':
+        paths = [
+            'M218 287C240 242 294 243 327 268S369 301 348 337 276 355 253 326 289 286 327 304 370 360 319 376',
+            'M252 224C286 250 254 276 287 299S351 320 379 288 344 242 316 265 294 342 264 366',
+            'M211 335C247 359 271 319 305 334S358 373 383 333 341 286 306 310 256 296 249 264',
+        ]
+        flows = ''.join(f'<path class="ultron-flow ultron-flow-{i}" d="{d}" pathLength="100"/>' for i, d in enumerate(paths))
+        points = [(238,278),(284,244),(332,286),(357,330),(302,356),(261,326)]
+        nodes = ''.join(f'<circle class="life-node ultron-node" cx="{x}" cy="{y}" r="{2.1 + i%3*.4}" style="--life-delay:-{i*.68:.2f}s"/>' for i,(x,y) in enumerate(points))
+        return '<g class="core-life ultron-life" fill="none" aria-hidden="true"><ellipse class="ultron-energy" cx="300" cy="304" rx="115" ry="103"/><circle class="life-orbit ultron-orbit" cx="300" cy="300" r="236" pathLength="100"/><g class="ultron-current">' + flows + nodes + '</g></g>'
+    return ''
+
+def selection_life(kind):
+    """Camadas 2D específicas, animadas só em cartões visíveis na galeria."""
+    ticks = ''.join(f'<path d="M300 43v{9 if i%3 else 16}" transform="rotate({i*30} 300 300)"/>' for i in range(12))
+    nodes = ''.join(f'<circle class="selector-node" cx="300" cy="61" r="{2.2 if i%2 else 3.1}" transform="rotate({i*60} 300 300)" style="--node-delay:-{i*.9:.1f}s"/>' for i in range(6))
+    base = f'<g class="selector-graduation">{ticks}</g><g class="selector-orbit"><circle cx="300" cy="300" r="249" pathLength="100" stroke-dasharray="13 12 1 12 13 12 1 12"/><circle cx="300" cy="300" r="222" pathLength="100" stroke-dasharray="2 23 2 23 2 23 2 23"/></g>{nodes}'
+    if kind == 'jarvis':
+        detail = '<g class="selector-sweep"><path d="M300 300 448 209A174 174 0 0 1 467 350Z" class="selector-sector"/><path d="M300 300 448 209"/></g><g class="selector-routes"><path d="M106 300h38l24-24h37m290 24h-38l-24 24h-37M300 107v38l24 24v37" pathLength="100" stroke-dasharray="9 91"/></g><circle class="selector-heart" cx="300" cy="300" r="121"/>'
+    elif kind == 'friday':
+        detail = '<g class="selector-tactical"><path d="M125 228v-27h34m282 0h34v27M125 371v27h34m282 0h34v-27"/><path d="M300 104v30m196 166h-30M300 496v-30M104 300h30"/></g><g class="selector-sweep"><path d="M300 300 409 178A164 164 0 0 1 462 322Z" class="selector-sector"/></g><circle class="selector-heart" cx="300" cy="300" r="148"/>'
+    elif kind == 'vision':
+        detail = '<g class="selector-empathy"><ellipse cx="300" cy="300" rx="183" ry="77" transform="rotate(-30 300 300)"/><ellipse cx="300" cy="300" rx="183" ry="77" transform="rotate(30 300 300)"/></g><path class="selector-gem" d="m300 214 24 25-24 25-24-25Z"/><circle class="selector-heart" cx="300" cy="239" r="39"/>'
+    elif kind == 'ultron':
+        detail = '<g class="selector-neural"><path d="M208 266c52-58 117 1 99 48s-77 15-50-20 109-32 115 24-99 73-118 23M266 216c36 59-29 105 23 131s97-55 47-78-77 55-111 75" pathLength="100" stroke-dasharray="12 88"/><path d="m226 229 38 39 59-32 35 87-81 37-52-36 92-30"/></g><ellipse class="selector-heart" cx="300" cy="300" rx="104" ry="110"/>'
+    elif kind == 'veronica':
+        detail = '<g class="selector-gates"><path d="M197 174v-18h45m116 0h45v18M197 426v18h45m116 0h45v-18"/><path d="M173 237h-15v43m0 40v43h15m254-126h15v43m0 40v43h-15"/></g><path class="selector-lift" d="M300 199v200" pathLength="100" stroke-dasharray="9 91"/><circle class="selector-heart" cx="300" cy="343" r="22"/>'
+    elif kind in ('karen','iris'):
+        detail = '<g class="selector-sensors"><path d="m300 184 101 58v116l-101 58-101-58V242Z" stroke-dasharray="8 12"/><circle cx="300" cy="300" r="107" stroke-dasharray="4 22"/></g><g class="selector-sweep"><path d="M300 300 412 231A132 132 0 0 1 425 344Z" class="selector-sector"/></g><circle class="selector-heart" cx="300" cy="300" r="30"/>'
+    else:
+        detail = '<g class="selector-optics"><path d="M175 270v-19h28m201 0h28v19M175 346v19h28m201 0h28v-19"/><path d="M199 307h49m96 0h49m-172-38 35 77m77-88 35 77"/></g><path class="selector-lift" d="M183 250h234"/><circle class="selector-heart" cx="300" cy="300" r="146"/>'
+    return f'<g class="core-life selector-life selector-{kind}" fill="none" aria-hidden="true">{base}{detail}</g>'
+
+def svg(kind, embedded=True):
+    href = 'data:image/png;base64,' + base64.b64encode((ROOT / 'assets/art' / f'{kind}-hud.png').read_bytes()).decode('ascii') if embedded else f'assets/art/{kind}-hud.png'
+    label = ''
+    if kind in ('jarvis', 'friday'):
+        title = 'J.A.R.V.I.S.' if kind == 'jarvis' else 'F.R.I.D.A.Y.'
+        sub = 'DISCRETION / LOYALTY' if kind == 'jarvis' else 'ANALYSIS / STRATEGY'
+        label = f'<text class="core-word" x="300" y="307">{title}</text><text class="core-subtitle" x="300" y="331">{sub}</text>'
+    metric = json.loads((ROOT / 'art-metrics.json').read_text('utf-8'))[kind]
+    left, top, right, bottom = metric['bounds']
+    factor = metric['targetDiameter'] / max(right-left, bottom-top)
+    width, height = metric['width']*factor, metric['height']*factor
+    x, y = 300-(left+right)*factor/2, 300-(top+bottom)*factor/2
+    return f'<svg class="core-art core-{kind} generated-art" data-art-file="{kind}-hud.png" viewBox="0 0 600 600" preserveAspectRatio="xMidYMid meet" aria-hidden="true"><image class="hud-art-image" href="{href}" x="{x:.3f}" y="{y:.3f}" width="{width:.3f}" height="{height:.3f}" preserveAspectRatio="xMidYMid meet"/>{label}{life_svg(kind)}{selection_life(kind)}</svg>'
 
 def build():
- personas=json.loads((ROOT/'personas.json').read_text('utf-8'))
- visuals={key:svg(key) for key in personas}
- html=(ROOT/'fonte/base.html').read_text('utf-8')
- css=(ROOT/'fonte/app.css').read_text('utf-8')
- js=(ROOT/'fonte/core.js').read_text('utf-8')+'\n'+(ROOT/'fonte/app.js').read_text('utf-8')
- data=json.dumps({'personas':personas,'visuals':visuals},ensure_ascii=False).replace('</','<\\/')
- html=html.replace('<!-- STYLE -->','<style>\n'+css+'\n</style>').replace('<!-- DATA -->','<script type="application/json" id="fusion-data">'+data+'</script>').replace('<!-- SCRIPT -->','<script>\n'+js+'\n</script>')
- for name in ['index.html','JARVIS_FUSION_MK_XIV.html']:(ROOT/name).write_text(html,'utf-8')
- print('Fusion MK XIV:',len(html.encode()),'bytes por HTML, quatro identidades, sem arquivos externos obrigatórios.')
-if __name__=='__main__':build()
+    personas = json.loads((ROOT / 'personas.json').read_text('utf-8'))
+    template = (ROOT / 'fonte/base.html').read_text('utf-8')
+    css = '\n'.join((ROOT / 'fonte' / name).read_text('utf-8') for name in ['app.css', 'hud.css', 'guides.css', 'systems.css', 'living-systems.css', 'stark-systems.css', 'mobile.css', 'extensions.css', 'selection-motion.css', 'adaptive.css'])
+    js = '\n'.join((ROOT / 'fonte' / name).read_text('utf-8') for name in ['connectors.js', 'core.js', 'platform.js', 'storage.js', 'cloud.js', 'device.js', 'documents.js', 'studio.js', 'compatibility.js', 'guide.js', 'app.js'])
+    js = js.replace('/* CATALOG */ {}', json.dumps(json.loads((ROOT / 'api-presets.json').read_text('utf-8')), ensure_ascii=False))
+    for embedded in (True, False):
+        visuals = {key: svg(key, embedded) for key in personas}
+        guide_art = 'data:image/png;base64,' + base64.b64encode((ROOT / 'assets/art/dum-e-u-hud.png').read_bytes()).decode('ascii') if embedded else 'assets/art/dum-e-u-hud.png'
+        vendor_files={'pdf':'vendor/pdfjs/pdf.mjs','pdfWorker':'vendor/pdfjs/pdf.worker.mjs','pdfViewer':'vendor/pdfjs/pdf_viewer.mjs','pdfCSS':'vendor/pdfjs/pdf_viewer.css','pdfLib':'vendor/pdf-lib/pdf-lib.js','zip':'vendor/jszip/jszip.js','word':'vendor/docx/docx.js'}
+        vendor_sources={key:(ROOT/path).read_text('utf-8') for key,path in vendor_files.items()} if embedded else {}
+        data = json.dumps({'vendorSources':vendor_sources,'release':'15.0.0','personas':personas,'visuals':visuals,'guideArt':guide_art}, ensure_ascii=False).replace('</', '<\\/')
+        html = template.replace('<!-- STYLE -->','<style>\n'+css+'\n</style>').replace('<!-- BOOTSTRAP -->','<script>\n'+(ROOT/'fonte/legacy.js').read_text('utf-8')+'\n</script>').replace('<!-- DATA -->','<script type="application/json" id="fusion-data">'+data+'</script>').replace('<!-- SCRIPT -->','<script>\n'+js+'\n</script>')
+        if not embedded:
+            html = html.replace('</head>','<link rel="manifest" href="manifest.webmanifest"><meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent"><link rel="apple-touch-icon" href="assets/icons/icon-192.png"></head>')
+            html = html.replace('</body>', '<script>if("serviceWorker" in navigator && location.protocol === "https:"){window.addEventListener("load",function(){navigator.serviceWorker.register("./sw.js").catch(function(){});});}</script></body>')
+        (ROOT / ('JARVIS_MK_XV.html' if embedded else 'index.html')).write_text(html,'utf-8')
+    dist = ROOT / 'dist'
+    (dist / 'assets').mkdir(parents=True,exist_ok=True)
+    shutil.copytree(ROOT/'assets/art',dist/'assets/art',dirs_exist_ok=True)
+    if (ROOT/'assets/icons').exists():shutil.copytree(ROOT/'assets/icons',dist/'assets/icons',dirs_exist_ok=True)
+    shutil.copytree(ROOT/'vendor',dist/'vendor',dirs_exist_ok=True)
+    shutil.copyfile(ROOT/'index.html',dist/'index.html')
+    shutil.copyfile(ROOT/'assets/favicon.svg',dist/'assets/favicon.svg')
+    manifest={'name':'J.A.R.V.I.S. MK XV','short_name':'J.A.R.V.I.S.','start_url':'./','scope':'./','display':'standalone','background_color':'#040e15','theme_color':'#040e15','lang':'pt-BR','icons':[{'src':'assets/icons/icon-192.png','sizes':'192x192','type':'image/png'},{'src':'assets/icons/icon-512.png','sizes':'512x512','type':'image/png'}]}
+    (ROOT/'manifest.webmanifest').write_text(json.dumps(manifest,ensure_ascii=False,indent=2),'utf-8')
+    shutil.copyfile(ROOT/'manifest.webmanifest',dist/'manifest.webmanifest')
+    revision=hashlib.sha256((ROOT/'index.html').read_bytes()).hexdigest()[:12]
+    worker = (ROOT/'fonte/service-worker.js').read_text('utf-8').replace('__CACHE_VERSION__',revision)
+    (ROOT/'sw.js').write_text(worker,'utf-8');(dist/'sw.js').write_text(worker,'utf-8')
+    print('J.A.R.V.I.S. MK XV: HTML portátil', (ROOT/'JARVIS_MK_XV.html').stat().st_size, 'bytes; entrada web', (dist/'index.html').stat().st_size, 'bytes; 8 artes 2D sob demanda.')
+if __name__ == '__main__':
+    build()

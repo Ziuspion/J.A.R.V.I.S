@@ -1,0 +1,32 @@
+{
+  "mode": "builtin",
+  "transparent_background": true,
+  "jobs": [
+    {
+      "id": "jarvis",
+      "prompt": "Use case: style-transfer. Image 1 is the user's Iron Man workshop screenshot, a MOOD and ENGINEERING-DENSITY reference only, never reproduce the room or people. Image 2 is the JARVIS subject/structure reference: segmented cyan circular engineering HUD. Images 3 and 4 are the supporting style and luminous-finish references from the companion EDITH and Ultron avatars. Redesign JARVIS to belong to that same finished visual family, inspired by the precise cyan workshop displays of Iron Man 1, 2 and 3. Palette: luminous ice-cyan and teal-white, very small restrained warm amber indexing accents. Fine layered concentric engineering rings and a subtle elegant circuit mesh, tiny radial dividers, sharp interrupted arcs, sense of discreet British precision. Keep the center 28% mostly dark and quiet for a live typeset JARVIS label added by the app; no central icon, no reactor triangle and no letters in the image itself. Finished isolated circular HUD avatar for a real web assistant, part of a cohesive four-character visual family. True transparent background with soft alpha glow. Square 1:1 composition, concentric outer ring centered at 50%/50%, outer circle occupies about 84% of canvas and all energy stays inside the canvas with breathing room. Front-on orthographic 2D luminous screen graphics, no tilt, no perspective, no extruded three-dimensional metal disc. Precision thin technical marks, segmented arcs, elegant black transparent negative space and clean electric glow. No photograph rectangle, no humanoid face, no robot mask, no scene, no letters, no numbers, no words, no logos, no watermark. Preserve circular proportions. Match the polished finesse and visual scale of the supplied EDITH and neural-core art, but give each character a unique internal structure.",
+      "paths": [
+        "assets/referencias/oficina-stark.jpg",
+        "assets/referencias/jarvis_53.jpeg",
+        "assets/art/edith-hud.png",
+        "assets/referencias/ultron-hud-ciano.png"
+      ]
+    },
+    {
+      "id": "friday",
+      "prompt": "Use case: style-transfer. Image 1 is the FRIDAY edit target/structure reference: concentric orange rings, bold segmented annulus, precise radial marks. Images 2 and 3 are the supporting luminous-finish and common-visual-family references, EDITH and Ultron. Redesign FRIDAY as an elegant analytical tactical system from Avengers: Age of Ultron, matching the craftsmanship of those two finished avatars. Palette: vibrant copper-orange and warm amber, white-hot orange edges, deep burnt-orange inner marks, no cyan or blue rings. Distinct identity: broad interrupted orange blocks with alternating narrow fine tracks, asymmetric small sensor arcs, confident disciplined geometric rhythms. Keep the center 28% dark and quiet for a live typeset FRIDAY label added by the app. No text in the image itself. Finished isolated circular HUD avatar for a real web assistant, part of a cohesive four-character visual family. True transparent background with soft alpha glow. Square 1:1 composition, concentric outer ring centered at 50%/50%, outer circle occupies about 84% of canvas and all energy stays inside the canvas with breathing room. Front-on orthographic 2D luminous screen graphics, no tilt, no perspective, no extruded three-dimensional metal disc. Precision thin technical marks, segmented arcs, elegant black transparent negative space and clean electric glow. No photograph rectangle, no humanoid face, no robot mask, no scene, no letters, no numbers, no words, no logos, no watermark. Preserve circular proportions. Match the polished finesse and visual scale of the supplied EDITH and neural-core art, but give each character a unique internal structure.",
+      "paths": [
+        "assets/referencias/friday_58.jpeg",
+        "assets/art/edith-hud.png",
+        "assets/referencias/ultron-hud-ciano.png"
+      ]
+    },
+    {
+      "id": "ultron",
+      "prompt": "Use case: style-transfer. Image 1 is the exact edit target, the existing circular Ultron HUD art with its organic tangled neural filament cloud. Keep the recognizable organic asymmetric neural-cluster silhouette, centered circular composition, size, proportion, ring structure and high level of fine detail. Change the full visual identity from cyan/teal to BLOOD RED: deep crimson and scarlet rings, burgundy lowlights, tiny white-hot red core filaments, restrained pure-red glow. Eliminate every cyan, turquoise, blue and amber feature; the artwork is exclusively a red-spectrum neural HUD. Make the rings read as precise flat screen graphics with no perspective or extruded 3D metal. Aggressive interrupted arc geometry, yet the same refined family as EDITH. Do not make a face, skull, robot mask or gore. The subject is an abstract red neural-energy cloud, inspired by Ultron in Avengers: Age of Ultron. Finished isolated circular HUD avatar for a real web assistant, part of a cohesive four-character visual family. True transparent background with soft alpha glow. Square 1:1 composition, concentric outer ring centered at 50%/50%, outer circle occupies about 84% of canvas and all energy stays inside the canvas with breathing room. Front-on orthographic 2D luminous screen graphics, no tilt, no perspective, no extruded three-dimensional metal disc. Precision thin technical marks, segmented arcs, elegant black transparent negative space and clean electric glow. No photograph rectangle, no humanoid face, no robot mask, no scene, no letters, no numbers, no words, no logos, no watermark. Preserve circular proportions. Match the polished finesse and visual scale of the supplied EDITH and neural-core art, but give each character a unique internal structure.",
+      "paths": [
+        "assets/referencias/ultron-hud-ciano.png"
+      ]
+    }
+  ]
+}

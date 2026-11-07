@@ -1,0 +1,31 @@
+/* Dois núcleos circulares, dois ambientes: oficina ciano e análise em cobre. */
+body[data-persona=jarvis]{--bg:#040e15;--surface:#081b25;--raised:#10313e;--input:#041219;--text:#e3f6f8;--muted:#9fbdc6;--radius:7px;--motif-size:320px;--motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='320' viewBox='0 0 320 320'%3E%3Cg fill='none' stroke='%237ce8f2' stroke-width='.65'%3E%3Ccircle cx='160' cy='160' r='126'/%3E%3Ccircle cx='160' cy='160' r='114' stroke-dasharray='44 10 4 10'/%3E%3Cpath d='M0 160h45m230 0h45M160 0v45m0 230v45M71 71l20 20m138 138 20 20M71 249l20-20m138-138 20-20'/%3E%3Cpath d='M0 23h55l20 20h38m207 254h-55l-20-20h-38'/%3E%3C/g%3E%3C/svg%3E")}
+body[data-persona=friday]{--bg:#100b08;--surface:#20150e;--raised:#39271a;--input:#130d09;--text:#fff1e2;--muted:#cfb39a;--radius:9px;--motif-size:340px;--motif:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='340' height='340' viewBox='0 0 340 340'%3E%3Cg fill='none' stroke='%23ff9a43' stroke-width='.7'%3E%3Ccircle cx='170' cy='170' r='128' stroke-dasharray='95 12 12 12'/%3E%3Ccircle cx='170' cy='170' r='110' stroke-dasharray='2 9'/%3E%3Cpath d='M170 16v33m121 121h33M170 291v33M16 170h33M82 77l21 21m134 144 21 21M82 263l21-21m134-144 21-21'/%3E%3Cpath d='M56 170a114 114 0 0 1 114-114m0 228a114 114 0 0 0 114-114' stroke-width='4'/%3E%3C/g%3E%3C/svg%3E")}
+body:is([data-persona=jarvis],[data-persona=friday]) .ambient{background:radial-gradient(ellipse at 77% 39%,rgba(var(--rgb),.13),transparent 52%),linear-gradient(125deg,var(--bg) 25%,var(--surface))}
+body:is([data-persona=jarvis],[data-persona=friday]) .subgrid{opacity:.12;background-size:var(--motif-size);-webkit-mask-image:linear-gradient(90deg,transparent,#000);mask-image:linear-gradient(90deg,transparent,#000)}
+body:is([data-persona=jarvis],[data-persona=friday]) .scene-orbit{width:650px;height:650px;aspect-ratio:1;top:calc(43% - 325px);left:calc(74% - 325px);border-radius:50%;transform:none;border:1px solid rgba(var(--rgb),.13);background:none;box-shadow:0 0 0 22px rgba(var(--rgb),.018),0 0 0 82px rgba(var(--rgb),.012)}
+body:is([data-persona=jarvis],[data-persona=friday]) .scene-orbit:before{inset:24px;border:1px dashed rgba(var(--rgb),.16)}
+body:is([data-persona=jarvis],[data-persona=friday]) .scene-orbit:after{inset:82px;border:2px solid transparent;border-left-color:rgba(var(--rgb),.14);border-right-color:rgba(var(--rgb),.14);transform:rotate(-28deg)}
+body:is([data-persona=jarvis],[data-persona=friday]) .header-symbol{border-radius:50%;background:radial-gradient(circle,rgba(var(--rgb),.1),transparent 70%);box-shadow:inset 0 0 0 4px var(--surface),inset 0 0 0 5px rgba(var(--rgb),.15)}
+body:is([data-persona=jarvis],[data-persona=friday]) .core-frame:before{inset:-2%;border:1px dashed rgba(var(--rgb),.22);border-radius:50%}
+body:is([data-persona=jarvis],[data-persona=friday]) .core-frame:after{inset:-7%;border:1px solid transparent;border-left-color:rgba(var(--rgb),.33);border-right-color:rgba(var(--rgb),.33);border-radius:50%;opacity:.7;transform:rotate(-20deg)}
+body:is([data-persona=jarvis],[data-persona=friday]) .core-frame-code{bottom:-10px;left:18px;background:var(--bg);padding:0 6px}
+body:is([data-persona=jarvis],[data-persona=friday]) .core-frame-caption{top:-9px;right:16px;background:var(--bg);padding:0 6px}
+body:is([data-persona=jarvis],[data-persona=friday]) :is(.hud-panel,.composer){border-width:1px;background:linear-gradient(125deg,rgba(var(--rgb),.045),transparent 60%),var(--surface);box-shadow:inset 0 1px 0 rgba(var(--rgb),.065)}
+body[data-persona=jarvis] .topbar:after{height:1px;width:145px;background:linear-gradient(90deg,var(--accent) 0 72%,var(--secondary) 72% 79%,transparent 79% 82%,var(--accent) 82%)}
+body[data-persona=jarvis] .sidebar-context{border-left:2px solid rgba(var(--rgb),.6);background:radial-gradient(circle at 100% 0,rgba(var(--rgb),.1),transparent 60%)}
+body[data-persona=jarvis] .hud-panel:before{width:45px;height:1px;background:linear-gradient(90deg,var(--accent) 0 70%,transparent 70% 80%,var(--secondary) 80%)}
+body[data-persona=jarvis] .hud-keywords>span:before{border-radius:50%}
+body[data-persona=jarvis] .primary-btn{background:linear-gradient(120deg,rgba(var(--rgb),.14),rgba(var(--rgb),.04));box-shadow:inset 0 1px 0 rgba(var(--rgb),.14)}
+body[data-persona=jarvis] .modal-header:before{width:2px;top:30px;bottom:30px;background:linear-gradient(var(--accent) 0 75%,transparent 75% 83%,var(--secondary) 83%)}
+body[data-persona=friday] .topbar{background:linear-gradient(90deg,rgba(var(--rgb),.07),transparent 75%),var(--bg)}
+body[data-persona=friday] .topbar:after{width:180px;height:2px;background:repeating-linear-gradient(90deg,var(--accent) 0 30px,transparent 30px 35px)}
+body[data-persona=friday] .sidebar-context:after{width:105px;height:105px;right:-45px;bottom:-56px;border:1px solid var(--edge);border-radius:50%;transform:none;box-shadow:0 0 0 7px rgba(var(--rgb),.03),0 0 0 8px rgba(var(--rgb),.12)}
+body[data-persona=friday] .hud-panel{border-top-color:rgba(var(--rgb),.5)}
+body[data-persona=friday] .hud-panel:before{height:4px;width:42px;top:0;left:18px;border-radius:0 0 3px 3px;background:repeating-linear-gradient(90deg,var(--accent) 0 10px,transparent 10px 14px)}
+body[data-persona=friday] .hud-panel:after{content:'';position:absolute;right:-36px;bottom:-42px;width:100px;height:100px;border:1px solid rgba(var(--rgb),.1);border-radius:50%;pointer-events:none}
+body[data-persona=friday] .quick-personas>button.active{box-shadow:inset 0 -2px 0 var(--accent)}
+body[data-persona=friday] .primary-btn{background:linear-gradient(115deg,rgba(var(--rgb),.19),rgba(var(--rgb),.07));border-color:rgba(var(--rgb),.7)}
+body[data-persona=friday] .modal-header:before{height:35px;width:35px;left:auto;right:80px;top:24px;bottom:auto;border-radius:50%;background:none;border:1px dashed rgba(var(--rgb),.5)}
+/* Os painéis ficam legíveis; o fundo circular nunca invade o texto da conversa. */
+body:is([data-persona=jarvis],[data-persona=friday]) .has-messages .message-scroll{background:var(--bg)}

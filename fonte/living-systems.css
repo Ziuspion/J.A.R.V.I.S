@@ -1,0 +1,38 @@
+/* As PNGs permanecem imóveis e proporcionais; apenas as camadas de luz se movem. */
+#main-core .new-life,.has-messages #dock-art .new-life{display:inline;opacity:.8}
+#personas-modal[open] .persona-card:not(.motion-visible) .core-life{display:none}
+.new-life{stroke:var(--accent);stroke-width:1.7;stroke-linecap:round;pointer-events:none}
+.new-life circle,.new-life path{vector-effect:non-scaling-stroke}
+.new-life .sensor-track,.new-life .sensor-sweep,.new-life .contingency-track,.new-life .vision-orbit{transform-origin:300px 300px}
+.sensor-track{stroke-width:2;opacity:.6;animation:sensor-orbit 22s linear infinite}
+.sensor-sweep{stroke:var(--secondary);stroke-width:1.4;opacity:.45;animation:sensor-orbit 18s linear infinite}
+.sensor-sector{fill:var(--accent);fill-opacity:.075;stroke:none}
+.sensor-link{stroke:var(--secondary);opacity:.65;animation:signal-progress 8s linear infinite}
+.sensor-heart{fill:var(--accent);fill-opacity:.06;stroke-width:1.3;transform-origin:300px 296px;animation:sensor-heart 5.6s ease-in-out infinite}
+.sensor-node{fill:var(--secondary);stroke:none;animation:sensor-node 4.8s ease-in-out infinite;animation-delay:var(--node-delay)}
+.iris-life .sensor-track{animation-direction:reverse;animation-duration:17s}
+.iris-life .sensor-sweep{animation-duration:13s}
+.iris-life .sensor-link{animation-direction:reverse;animation-duration:6s}
+.iris-life .sensor-node{animation-duration:4s}
+.contingency-track{stroke:var(--secondary);stroke-width:2;opacity:.6;animation:contingency-orbit 30s linear infinite}
+.contingency-scan{opacity:.62;stroke-width:1.35}
+.contingency-line{stroke:var(--secondary);animation:contingency-scan 6.4s ease-in-out infinite}
+.contingency-flow{stroke:var(--secondary);stroke-width:2.6;opacity:.7;animation:signal-progress 4.8s linear infinite}
+.contingency-beacon{fill:var(--secondary);fill-opacity:.14;stroke-width:1.4;transform-origin:300px 342px;animation:contingency-beacon 4.8s ease-in-out infinite}
+.vision-orbit{stroke:var(--secondary);stroke-width:1.5;opacity:.5;animation:sensor-orbit 38s linear infinite}
+.vision-diamond{stroke:var(--secondary);fill:var(--accent);fill-opacity:.04;stroke-width:1.8;animation:vision-light 7s ease-in-out infinite}
+.vision-thought{stroke:var(--secondary);opacity:.7;animation:signal-progress 10s linear infinite}
+.vision-pulse{stroke-width:1;opacity:.35;transform-origin:300px 244px;animation:vision-pulse 7s ease-in-out infinite}
+@keyframes sensor-orbit{to{transform:rotate(360deg)}}
+@keyframes signal-progress{to{stroke-dashoffset:-100}}
+@keyframes sensor-node{0%,100%{opacity:.2}28%{opacity:.85}55%{opacity:.35}}
+@keyframes sensor-heart{0%,100%{opacity:.28;transform:scale(.96)}50%{opacity:.75;transform:scale(1.07)}}
+@keyframes contingency-orbit{0%{transform:rotate(0deg)}45%{transform:rotate(90deg)}55%{transform:rotate(90deg)}100%{transform:rotate(180deg)}}
+@keyframes contingency-scan{0%,100%{transform:translateY(-22px);opacity:.22}50%{transform:translateY(72px);opacity:.75}}
+@keyframes contingency-beacon{0%,100%{transform:scale(.9);opacity:.25}45%{transform:scale(1.3);opacity:.8}}
+@keyframes vision-light{0%,100%{opacity:.3;fill-opacity:.03}50%{opacity:.9;fill-opacity:.18}}
+@keyframes vision-pulse{0%,100%{transform:scale(.92);opacity:.2}50%{transform:scale(1.17);opacity:.6}}
+/* Pausa nas áreas encobertas, nas abas ocultas e quando o usuário reduz movimento. */
+body:has(dialog[open]) :is(#main-core,#dock-art) *,body.effects-paused .core-art *{animation-play-state:paused!important}
+body.no-effects .new-life{display:none!important}
+@media(prefers-reduced-motion:reduce){.new-life{display:none!important}.new-life *{animation:none!important}}

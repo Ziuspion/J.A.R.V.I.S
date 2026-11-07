@@ -1,1 +1,1 @@
-"""Serviços opcionais do Fusion MK XIV; apenas biblioteca padrão."""
+"""Serviços opcionais do J.A.R.V.I.S. MK XV; apenas biblioteca padrão."""

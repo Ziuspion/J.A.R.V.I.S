@@ -1,0 +1,23 @@
+/* A imagem não gira nem se deforma: só luz, trilhas e retículas 2D se movem. */
+.selector-life{display:none;stroke:var(--accent);stroke-width:1.15;opacity:.7;pointer-events:none}.selector-life *{vector-effect:non-scaling-stroke}
+#personas-modal[open] .motion-visible .selector-life{display:inline}.persona-preview .core-life:not(.selector-life){display:none!important}.persona-preview{contain:layout paint;isolation:isolate}.selector-graduation{opacity:.36}.selector-orbit,.selector-sweep,.selector-tactical,.selector-empathy,.selector-gates,.selector-sensors{transform-origin:300px 300px}
+.selector-orbit{animation:selector-turn 32s linear infinite;stroke-width:1.5;opacity:.6}.selector-orbit>circle:last-child{stroke:var(--secondary);opacity:.5}.selector-sweep{animation:selector-turn 23s linear infinite;stroke:var(--secondary);opacity:.45}.selector-sector{fill:var(--accent);fill-opacity:.045;stroke:none}.selector-node{fill:var(--secondary);stroke:none;animation:selector-node-light 6s ease-in-out infinite;animation-delay:var(--node-delay)}
+.selector-heart{transform-origin:300px 300px;animation:selector-breathe 7s ease-in-out infinite;opacity:.23;stroke-width:.85}.selector-routes{stroke:var(--secondary);animation:selector-flow 9s linear infinite;opacity:.7}
+.selector-friday .selector-orbit{animation-direction:reverse;animation-duration:27s}.selector-tactical{stroke:var(--secondary);opacity:.65;animation:selector-tactical-lock 16s ease-in-out infinite}.selector-friday .selector-sweep{animation-duration:18s}
+.selector-vision .selector-orbit{animation-duration:44s}.selector-empathy{opacity:.15;animation:selector-turn 52s linear infinite}.selector-gem{stroke:var(--secondary);fill:var(--accent);fill-opacity:.05;animation:selector-node-light 8s ease-in-out infinite}.selector-vision .selector-heart{transform-origin:300px 239px}
+.selector-ultron .selector-orbit{animation-duration:25s;animation-direction:reverse}.selector-neural{stroke:var(--secondary);stroke-width:1.15;opacity:.65}.selector-neural>path:first-child{animation:selector-flow 8s linear infinite}.selector-neural>path:last-child{opacity:.22;animation:selector-neural-light 6.4s ease-in-out infinite}.selector-ultron .selector-heart{animation-duration:5.4s}
+.selector-veronica .selector-orbit{animation:selector-gate-turn 40s ease-in-out infinite}.selector-gates{stroke:var(--secondary);opacity:.6;animation:selector-tactical-lock 18s ease-in-out infinite}.selector-lift{stroke:var(--secondary);animation:selector-flow 6s linear infinite;opacity:.6}.selector-veronica .selector-heart{transform-origin:300px 343px}
+.selector-sensors{animation:selector-turn 34s linear infinite;opacity:.34}.selector-karen .selector-sweep{animation-direction:reverse;animation-duration:26s}.selector-iris .selector-orbit,.selector-iris .selector-sensors{animation-direction:reverse}.selector-iris .selector-sweep{animation-duration:19s}.selector-iris .selector-node{animation-duration:4.8s}
+.selector-optics{stroke:var(--secondary);animation:selector-optics-lock 10s ease-in-out infinite;opacity:.55}.selector-edith .selector-lift{animation:selector-optics-scan 8s ease-in-out infinite}.selector-edith .selector-orbit{animation-duration:29s}
+.persona-card:is(:hover,:focus-within) .selector-life,.persona-card.selected .selector-life{opacity:.95}.persona-card{transition:border-color .2s,background .2s,box-shadow .2s}.persona-card:focus-within{border-color:var(--p-color);box-shadow:inset 0 0 0 1px var(--p-color)}
+@keyframes selector-turn{to{transform:rotate(360deg)}}
+@keyframes selector-flow{to{stroke-dashoffset:-100}}
+@keyframes selector-breathe{0%,100%{opacity:.13;transform:scale(.98)}50%{opacity:.38;transform:scale(1.035)}}
+@keyframes selector-node-light{0%,100%{opacity:.18}40%{opacity:.9}65%{opacity:.35}}
+@keyframes selector-tactical-lock{0%,100%{opacity:.38;transform:rotate(0)}45%,55%{opacity:.75;transform:rotate(2deg)}}
+@keyframes selector-neural-light{0%,100%{opacity:.17}35%{opacity:.4}65%{opacity:.22}}
+@keyframes selector-gate-turn{0%{transform:rotate(0)}40%,60%{transform:rotate(90deg)}100%{transform:rotate(180deg)}}
+@keyframes selector-optics-lock{0%,100%{transform:translateY(-2px);opacity:.35}50%{transform:translateY(2px);opacity:.75}}
+@keyframes selector-optics-scan{0%,100%{transform:translateY(0);opacity:.1}50%{transform:translateY(100px);opacity:.5}}
+body.no-effects .selector-life,body.effects-paused .selector-life{display:none!important}
+@media(prefers-reduced-motion:reduce){.selector-life{display:none!important}}

@@ -1,0 +1,51 @@
+[
+  {
+    "package": "pdfjs-dist",
+    "version": "5.6.205",
+    "file": "pdfjs/pdf.mjs",
+    "lines": 33612,
+    "usedFor": "Leitura local e visualização de PDFs"
+  },
+  {
+    "package": "pdfjs-dist",
+    "version": "5.6.205",
+    "file": "pdfjs/pdf.worker.mjs",
+    "lines": 70100,
+    "usedFor": "Leitura local e visualização de PDFs"
+  },
+  {
+    "package": "pdfjs-dist",
+    "version": "5.6.205",
+    "file": "pdfjs/pdf_viewer.mjs",
+    "lines": 15158,
+    "usedFor": "Leitura local e visualização de PDFs"
+  },
+  {
+    "package": "pdfjs-dist",
+    "version": "5.6.205",
+    "file": "pdfjs/pdf_viewer.css",
+    "lines": 7226,
+    "usedFor": "Leitura local e visualização de PDFs"
+  },
+  {
+    "package": "pdf-lib",
+    "version": "1.17.1",
+    "file": "pdf-lib/pdf-lib.js",
+    "lines": 39674,
+    "usedFor": "Exportar conversas como PDF"
+  },
+  {
+    "package": "jszip",
+    "version": "3.10.1",
+    "file": "jszip/jszip.js",
+    "lines": 11577,
+    "usedFor": "Ler DOCX/XLSX e gerar planilhas"
+  },
+  {
+    "package": "docx",
+    "version": "9.6.1",
+    "file": "docx/docx.js",
+    "lines": 23075,
+    "usedFor": "Exportar conversas em Word"
+  }
+]

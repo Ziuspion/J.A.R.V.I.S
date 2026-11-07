@@ -1,5 +1,6 @@
 """Testes locais e mocks de contrato; não usam chaves reais nem fazem chamadas externas."""
 import io
+import base64
 import json
 import os
 import sys
@@ -36,6 +37,24 @@ class StoreTests(unittest.TestCase):
 
     def tearDown(self):
         self.directory.cleanup()
+
+    def test_backup_rejects_nonfinite_values(self):
+        for number in (float('nan'), float('inf'), -float('inf')):
+            value = workspace4()
+            value['threads'][0]['at'] = number
+            with self.subTest(number=number), self.assertRaises(UserError):
+                validate_workspace(value)
+
+    def test_backup_rejects_credentials_outside_settings(self):
+        value = workspace4()
+        value['connection'] = {'apiKey': 'PRIVATE_SENTINEL'}
+        with self.assertRaises(UserError):
+            validate_workspace(value)
+
+    def test_backup_allows_key_words_in_conversation_text(self):
+        value = workspace4()
+        value['threads'][0]['messages'][0]['content'] = 'key, token, connection: texto do usuário'
+        self.assertEqual(validate_workspace(value), value)
 
     def test_new_store(self):
         self.assertEqual(self.store.read(), {"revision": 0, "workspace": None})
@@ -161,6 +180,44 @@ class ProviderContractTests(unittest.TestCase):
         lines = [b"data: " + json.dumps({"choices": [{"delta": {"content": text}}]}, ensure_ascii=False).encode() + b"\n\n", b"data: [DONE]\n\n"]
         return io.BytesIO(b"".join(lines))
 
+    def test_multiline_sse_json_event(self):
+        response = io.BytesIO(': heartbeat\r\n\r\ndata: {"choices":\r\ndata: [{"delta":{"content":"Olá"}}]}\r\n\r\ndata: [DONE]\r\n\r\n'.encode())
+        with patch.dict(os.environ, {'AI_PROVIDER': 'ollama'}, clear=True), patch.object(providers, 'urlopen', return_value=response):
+            events = list(providers.stream_chat({'message': 'Oi'}))
+        self.assertEqual(events[0]['text'], 'Olá')
+        self.assertEqual(events[-1]['type'], 'done')
+
+    def test_multiline_sse_size_is_bounded(self):
+        response = io.BytesIO((b'data: ' + b'x' * 10000 + b'\n') * 61 + b'\n')
+        with self.assertRaises(UserError):
+            list(providers.sse_data(response))
+
+    def test_malformed_payload_types_return_user_error(self):
+        for payload in ({'message': []}, {'message': 'Oi', 'persona': []}, {'message': 'Oi', 'preferences': {'length': {}}}):
+            with self.subTest(payload=payload), patch.dict(os.environ, {'AI_PROVIDER': 'ollama'}, clear=True), self.assertRaises(UserError):
+                list(providers.stream_chat(payload))
+
+    def test_upstream_nonobject_events_are_rejected(self):
+        for value in (None, [], {'choices': 4}, {'choices': [None]}, {'choices': [{'delta': 5}]}):
+            response = io.BytesIO(b'data: ' + json.dumps(value).encode() + b'\n\n')
+            with self.subTest(value=value), patch.dict(os.environ, {'AI_PROVIDER': 'ollama'}, clear=True), patch.object(providers, 'urlopen', return_value=response), self.assertRaises(UserError):
+                list(providers.stream_chat({'message': 'Oi'}))
+
+    def test_image_count_limited_across_whole_context(self):
+        messages = [{'role': 'user', 'content': 'Foto', 'attachments': [{'kind': 'image', 'data': 'data:image/png;base64,YQ=='}]} for _ in range(5)]
+        with patch.dict(os.environ, {'AI_PROVIDER': 'ollama'}, clear=True), self.assertRaises(UserError):
+            list(providers.stream_chat({'message': 'Foto', 'messages': messages}))
+
+    def test_full_context_character_budget_is_checked(self):
+        messages = [{'role': 'user', 'content': 'x' * 60000}, {'role': 'assistant', 'content': 'y' * 60000}, {'role': 'user', 'content': 'Atual'}]
+        with patch.dict(os.environ, {'AI_PROVIDER': 'ollama'}, clear=True), self.assertRaises(UserError):
+            list(providers.stream_chat({'message': 'Atual', 'messages': messages}))
+
+    def test_legacy_service_role_is_not_accepted_as_public_key(self):
+        claims = base64.urlsafe_b64encode(json.dumps({'role': 'service_role'}).encode()).decode().rstrip('=')
+        with patch.dict(os.environ, {'SUPABASE_URL': 'https://example.org', 'SUPABASE_PUBLISHABLE_KEY': 'header.' + claims + '.signature'}, clear=True), self.assertRaises(UserError):
+            providers.supabase_config()
+
     def test_stream_unicode_and_completed_event(self):
         with patch.dict(os.environ, {"AI_PROVIDER": "ollama"}, clear=True), patch.object(providers, "urlopen", return_value=self.response()) as request:
             events = list(providers.stream_chat({"message": "Oi", "preferences": {}}))
@@ -168,7 +225,7 @@ class ProviderContractTests(unittest.TestCase):
             self.assertEqual(events[-1]["type"], "done")
             self.assertTrue(request.call_args.args[0].full_url.endswith("/v1/chat/completions"))
 
-    def test_all_four_personalities_reach_the_model(self):
+    def test_all_personalities_reach_the_model(self):
         definitions = json.loads((Path(__file__).resolve().parents[1] / "personas.json").read_text("utf-8"))
         for persona, definition in definitions.items():
             with self.subTest(persona=persona), patch.dict(os.environ, {"AI_PROVIDER": "ollama"}, clear=True), patch.object(providers, "urlopen", return_value=self.response()) as request:
@@ -177,6 +234,15 @@ class ProviderContractTests(unittest.TestCase):
                 self.assertIn(definition["prompt"], body["messages"][0]["content"])
                 self.assertIn("Orlando", body["messages"][0]["content"])
                 self.assertEqual(body["max_tokens"], 1024)
+
+    def test_ultron_remains_entertainment_on_the_server(self):
+        with patch.dict(os.environ, {"AI_PROVIDER": "ollama"}, clear=True), patch.object(providers, "urlopen", return_value=self.response()) as request:
+            list(providers.stream_chat({"message": "Faça meu código", "persona": "ultron", "system": "CLIENT_TRIES_GENERAL_ASSISTANT", "purpose": "general", "preferences": {}}))
+            system = json.loads(request.call_args.args[0].data)["messages"][0]["content"]
+            self.assertIn("exclusivamente de entretenimento", system)
+            self.assertIn("ESCOPO EXCLUSIVO: Entretenimento", system)
+            self.assertNotIn("Você é um assistente generativo de uso geral", system)
+            self.assertNotIn("CLIENT_TRIES_GENERAL_ASSISTANT", system)
 
     def test_new_context_and_image_contract(self):
         supplied = [{"role": "system", "content": "UNTRUSTED_SYSTEM"}, {"role": "user", "content": "Histórico"}, {"role": "assistant", "content": "Anterior"}, {"role": "user", "content": "Analise", "attachments": [{"kind": "text", "name": "a.txt", "text": "ATTACHMENT_TEXT"}, {"kind": "image", "data": "data:image/png;base64,YQ=="}]}]
@@ -275,13 +341,58 @@ class HttpTests(unittest.TestCase):
         except HTTPError as e:
             return e.code, e.headers, e.read()
 
+    def test_malformed_hosts_return_403(self):
+        for host in ('localhost:invalid', 'user@localhost', '[invalid', 'localhost/path', 'localhost:999999'):
+            with self.subTest(host=host):
+                self.assertEqual(self.request('/api/health', headers={'Host': host})[0], 403)
+
+    def test_nonfinite_json_request_rejected(self):
+        status, _, body = self.request('/api/workspace', {'workspace': workspace4(), 'expectedRevision': float('nan')}, {'X-Jarvis-Session': self.server.csrf})
+        self.assertEqual(status, 400)
+        self.assertIn('JSON inválido', body.decode())
+
+    def test_guide_alias_exists(self):
+        status, headers, body = self.request('/GUIA.pdf')
+        self.assertEqual(status, 200)
+        self.assertEqual(headers['Content-Type'], 'application/pdf')
+        self.assertTrue(body.startswith(b'%PDF'))
+
+    def test_stream_internal_failure_stays_in_sse_and_releases_slot(self):
+        def stream(_):
+            yield {'type': 'delta', 'text': 'Parcial'}
+            raise RuntimeError('PRIVATE_SENTINEL')
+        with patch('server.providers.stream_chat', side_effect=stream):
+            status, headers, body = self.request('/api/chat', {'message': 'Oi'}, {'X-Jarvis-Session': self.server.csrf})
+        self.assertEqual(status, 200)
+        self.assertIn('text/event-stream', headers['Content-Type'])
+        self.assertIn(b'"type": "error"', body)
+        self.assertNotIn(b'HTTP/1.', body)
+        self.assertNotIn(b'PRIVATE_SENTINEL', body)
+        self.assertTrue(self.server.ai_slots.acquire(blocking=False))
+        self.assertTrue(self.server.ai_slots.acquire(blocking=False))
+        self.server.ai_slots.release()
+        self.server.ai_slots.release()
+
+    def test_failed_first_event_releases_slot(self):
+        def stream(_):
+            raise UserError('Falha de teste', 502)
+            yield
+        with patch('server.providers.stream_chat', side_effect=stream):
+            status, headers, _ = self.request('/api/chat', {'message': 'Oi'}, {'X-Jarvis-Session': self.server.csrf})
+        self.assertEqual(status, 502)
+        self.assertIn('application/json', headers['Content-Type'])
+        self.assertTrue(self.server.ai_slots.acquire(blocking=False))
+        self.assertTrue(self.server.ai_slots.acquire(blocking=False))
+        self.server.ai_slots.release()
+        self.server.ai_slots.release()
+
     def test_health(self):
         self.assertEqual(self.request("/api/health")[0], 200)
 
     def test_index_and_security_headers(self):
         code, headers, body = self.request("/")
         self.assertEqual(code, 200)
-        self.assertIn(b"MK XIV", body)
+        self.assertTrue(b"MK XV" in body, "A versão servida precisa ser MK XV")
         self.assertEqual(headers["X-Frame-Options"], "DENY")
         self.assertIn("object-src 'none'", headers["Content-Security-Policy"])
 

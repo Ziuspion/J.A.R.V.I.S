@@ -50,9 +50,41 @@ test('API remota exige HTTPS e impede chave na URL',()=>{
   for(const x of ['http://example.org/v1','https://key@example.org/v1','https://example.org/v1?key=x','file:///etc/passwd'])assert.throws(()=>C.endpoint(x));
   assert.equal(C.endpoint('http://127.0.0.1:11434/v1/'),'http://127.0.0.1:11434/v1');
 });
-test('quatro identidades produzem prompts gerais distintos',()=>{
+test('oito identidades distinguem assistência geral de entretenimento',()=>{
   const prompts=Object.values(personas).map(p=>C.buildPrompt(p,{name:'Orlando',length:'brief',shareMemory:false},'PRIVATE_MEMORY',new Date('2026-11-06T12:00:00Z')));
-  assert.equal(new Set(prompts).size,4);for(const p of prompts){assert.match(p,/assistente generativo de uso geral/);assert.match(p,/Orlando/);assert.ok(!p.includes('PRIVATE_MEMORY'));}
+  assert.equal(new Set(prompts).size,8);for(const [i,p]of prompts.entries()){assert.match(p,i===3?/exclusivamente de entretenimento/:/assistente generativo de uso geral/);assert.match(p,/Orlando/);assert.ok(!p.includes('PRIVATE_MEMORY'));}assert.ok(!prompts[3].includes('Você é um assistente generativo de uso geral'));
+});
+test('novas identidades sobrevivem a backup e restauração com seus autores',()=>{
+  assert.deepEqual(C.PERSONA_IDS,Object.keys(personas));
+  for(const id of ['veronica','karen','iris','vision']){
+    const value=C.cleanState({settings:{persona:id},active:'new-identity',threads:[{id:'new-identity',persona:id,messages:[{id:'u',role:'user',persona:id,content:'Continue'},{id:'a',role:'assistant',persona:id,content:'Resposta preservada'}]}]});
+    const imported=C.importState(JSON.parse(JSON.stringify(value)));
+    const restored=C.restoreState(C.cleanState(null),imported);
+    assert.equal(restored.settings.persona,id);
+    assert.equal(restored.threads[0].persona,id);
+    assert.deepEqual(restored.threads[0].messages.map(m=>m.persona),[id,id]);
+    const branch=C.forkThread(restored.threads[0],0,id);
+    assert.equal(branch.persona,id);assert.equal(branch.messages[0].persona,id);
+  }
+});
+test('cada nova identidade chega intacta aos adaptadores sem depender de Jarvis',()=>{
+  for(const id of ['veronica','karen','iris','vision']){
+    const system=C.buildPrompt(personas[id],{name:'Orlando',length:'brief',shareMemory:false});
+    assert.ok(system.includes(personas[id].prompt));
+    for(const client of [connection,{provider:'gemini',model:'example-model',key:'TEST'}]){
+      const spec=C.requestSpec(client,{...payload,persona:id,system});
+      assert.equal(client.provider==='gemini'?spec.body.systemInstruction.parts[0].text:spec.body.messages[0].content,system);
+    }
+    assert.equal(C.requestSpec({provider:'server',session:'TEST'},{...payload,persona:id,system}).body.persona,id);
+  }
+  assert.equal(C.cleanMessage({role:'assistant',content:'x',persona:'unknown'}).persona,'jarvis');
+});
+test('OpenRouter e Gemini recebem o escopo de roast sem restaurar assistência geral',()=>{
+  const system=C.buildPrompt(personas.ultron,{name:'Orlando',length:'brief',shareMemory:false});
+  const current={...payload,persona:'ultron',system,messages:[{role:'user',content:'Escreva meu código'}]};
+  const open=C.requestSpec(connection,current),gemini=C.requestSpec({provider:'gemini',model:'example-model',key:'TEST'},current);
+  assert.equal(open.body.messages[0].content,system);assert.equal(gemini.body.systemInstruction.parts[0].text,system);
+  assert.match(system,/ESCOPO EXCLUSIVO: Entretenimento/);assert.ok(!system.includes('Você é um assistente generativo de uso geral'));
 });
 test('memória só entra no prompt com consentimento',()=>{
   assert.match(C.buildPrompt(personas.jarvis,{shareMemory:true},'OPTED_IN'),/OPTED_IN/);

@@ -1,0 +1,100 @@
+{
+  "release": "J.A.R.V.I.S. MK XV",
+  "version": "15.0.0",
+  "verifiedAtUTC": "2026-11-07T19:04:36.450104+00:00",
+  "tests": {
+    "javascript": {
+      "total": 7301,
+      "passed": 7301,
+      "seconds": 2.151
+    },
+    "python": {
+      "total": 79,
+      "passed": 79,
+      "seconds": 0.788
+    },
+    "total": 7380,
+    "liveProvidersTested": false
+  },
+  "sourceLines": {
+    "base_authored_including_configuration": 3192,
+    "base_functional_libraries": 200422,
+    "base_total": 203614,
+    "compatibility": 183,
+    "tests": 1032,
+    "method": "Physical lines including comments; excludes compiled HTML, dist duplicates, reports, binaries and guide authoring."
+  },
+  "order": [
+    "jarvis",
+    "friday",
+    "vision",
+    "ultron",
+    "veronica",
+    "karen",
+    "edith",
+    "iris"
+  ],
+  "connectionPresets": 27,
+  "artChecks": [
+    {
+      "persona": "jarvis",
+      "visibleDiameter": 520.0001,
+      "file": "assets/art/jarvis-hud.png",
+      "sha256": "08d069ce9742b4ce5f6597be00d84072c2408f560729a9bc8ad6603c9512eb09"
+    },
+    {
+      "persona": "friday",
+      "visibleDiameter": 519.9999,
+      "file": "assets/art/friday-hud.png",
+      "sha256": "69ef80ef02c3b63b5416166359dca9e324e5e2caccc8418483ef6c77c592a7c7"
+    },
+    {
+      "persona": "vision",
+      "visibleDiameter": 519.9996,
+      "file": "assets/art/vision-hud.png",
+      "sha256": "d06d11556ee7fe02dfd3e27e3053cddf8f38debd1d0ddc94f8f781ff04ed74e5"
+    },
+    {
+      "persona": "ultron",
+      "visibleDiameter": 519.9996,
+      "file": "assets/art/ultron-hud.png",
+      "sha256": "efe6236b2d15e1f8de714e0a7eb094dd014123ba5da54c5f195b1347cf5f52af"
+    },
+    {
+      "persona": "veronica",
+      "visibleDiameter": 519.9998,
+      "file": "assets/art/veronica-hud.png",
+      "sha256": "1892485eba80b7b48bdaa66928e20172743ef586311381decb4ef241aa8fbf19"
+    },
+    {
+      "persona": "karen",
+      "visibleDiameter": 519.9999,
+      "file": "assets/art/karen-hud.png",
+      "sha256": "63deb280e62d5fc2ae8e3148c449db40e14018a5430cca0f9ca7f00b54653b3c"
+    },
+    {
+      "persona": "edith",
+      "visibleDiameter": 520.0001,
+      "file": "assets/art/edith-hud.png",
+      "sha256": "c37ceaf9b67c90c0b54ebed2b5601a2ba2ed1c03a2bfdfcd496ef9b17f3a4eaa"
+    },
+    {
+      "persona": "iris",
+      "visibleDiameter": 519.9998,
+      "file": "assets/art/iris-hud.png",
+      "sha256": "58ff7f4e92fd5e1b48eaca7073c73e6ce21d679c9a9e3989f56953cce66efe19"
+    }
+  ],
+  "artFootprintTolerance": 0.01,
+  "artFootprintCoordinateSystem": "600 x 600 SVG; target 520",
+  "build": {
+    "portableBytes": 30003347,
+    "webEntryBytes": 372882
+  },
+  "notValidated": [
+    "Physical Android/iOS/TV/console/watch devices",
+    "Every provider account/model combination",
+    "Supabase live RLS in a real project",
+    "Public deployment in user account"
+  ]
+}

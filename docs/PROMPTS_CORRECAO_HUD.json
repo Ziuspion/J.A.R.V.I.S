@@ -1,0 +1,18 @@
+{
+  "created": "2026-11-07",
+  "method": "built-in image generation",
+  "revision": "HUD abstrato sem mãos",
+  "format": "PNG RGBA, 1254x1254",
+  "items": [
+    {
+      "id": "karen",
+      "file": "assets/art/karen-hud.png",
+      "prompt": "Use case: stylized-concept. Asset type: corrected KAREN avatar for the Fusion AI application, PNG with real alpha transparency.\nInput 1: REFERENCE FOR THE ABSTRACT HOLOGRAPHIC INTERFACE ONLY. The desired subject is the floating circular graphic drawn ON TOP of the hands in this screenshot, NOT the hands or palms themselves. Completely discard every hand, palm, finger, arm, glove, body part, person and background from the reference. Do not depict a symbol or outline of hands either.\nInput 2: STYLE reference for the existing app's circular HUD art, front-facing precise luminous thin lines, concentric segmented rings and detailed electronics. Do not copy cyan palette.\nCreate a SINGLE abstract circular AI interface centered on a square canvas, fully visible with a narrow safe margin. Vivid deep electric blue and sapphire light on a navy-black translucent interior, matching the product's circular frame. The CORE itself is made exclusively of nested offset circular arcs, radial graduation marks, a hexagonal central signal node, six small hexagonal sensor nodes distributed around its inner orbital ring, delicate connecting vectors and a slightly asymmetric radar sweep sector. The inner array should closely evoke the floating circular sensor UI from input1 after the physical scene has been removed. Purely abstract holographic data geometry: no physical object, no face, no human silhouette, NO HANDS, NO PALMS, NO FINGERS, not even wireframe or stylized. Keep the inner core interesting and readable when small; avoid empty center. A clean diagrammatic flat frontal 2D HUD with no tilted ellipse or 3D model. Outer ring diameter and visual density should match input2, with white-blue luminous highlights and a dark blue center. Transparent background outside the circle, keep alpha. No words, names, letters, random text, numbers, logos or watermark. Same square aspect ratio, no cropping or stretch."
+    },
+    {
+      "id": "iris",
+      "file": "assets/art/iris-hud.png",
+      "prompt": "Use case: lighting-weather. Asset type: corrected IRIS AI avatar, sister design of KAREN.\nThe supplied image is the EDIT TARGET. Recolor this exact abstract circular sensor HUD from blue into VIVID ROYAL PURPLE and VIOLET. Preserve every concentric ring, hexagonal node, six sensor satellites, central hex core, calibration tick, connecting line, radar sector, framing, square dimensions, narrow safe margin, and flat 2D frontal orientation. ONLY change color: sapphire blue -> saturated royal violet, electric-blue highlights -> lilac and pale lavender, navy interior -> dark plum-black. No blue/cyan remaining. Keep the genuine alpha transparent area outside the circle. Do not add any new subject, text or shape. No hands, palms, arms, fingers, gloves, body parts, face, human silhouette or person. No crop or stretching. A perfectly matching purple edition of this abstract holographic data UI."
+    }
+  ]
+}

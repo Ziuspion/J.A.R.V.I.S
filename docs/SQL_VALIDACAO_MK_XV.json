@@ -1,0 +1,8 @@
+{
+  "parser": "pglast",
+  "version": "v8.7",
+  "statements": 14,
+  "plpgsql_functions": 2,
+  "result": "syntax_valid",
+  "live_database_tested": false
+}

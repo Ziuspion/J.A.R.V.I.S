@@ -1,0 +1,39 @@
+/* EDITH observa; Ultron mantém uma corrente neural. Só a seleção ganha essas camadas. */
+.core-life{display:none;pointer-events:none}
+#personas-modal[open] .persona-preview .core-life{display:inline;opacity:.78;transition:opacity .35s ease}
+#personas-modal[open] .persona-card:is(:hover,:focus-within,.selected) .core-life{opacity:1}
+.core-life .life-orbit{fill:none;stroke-width:2.5;stroke-linecap:round;stroke-dasharray:11 89}
+.edith-life .life-orbit{stroke:#c8eaff;opacity:.7}
+.edith-focus{stroke:#9edfff;stroke-width:1.8;stroke-linecap:square;opacity:.7}
+.edith-crosshair{stroke:#dbd4ff;stroke-width:1.4}
+.edith-reflection{stroke:#c6efff;stroke-width:2;stroke-linecap:round;opacity:0}
+.edith-node{fill:#d6edff;stroke:none;opacity:.6}
+.edith-signal{stroke:#b3a2ff;stroke-width:2.4;stroke-dasharray:8 6;opacity:.35}
+.ultron-life .life-orbit{stroke:#ff5360;stroke-dasharray:9 30 3 58;opacity:.58}
+.ultron-energy{fill:#ff253b;stroke:none;opacity:.035;transform-origin:300px 304px}
+.ultron-flow{fill:none;stroke:#ff9d9d;stroke-width:1.65;stroke-linecap:round;stroke-dasharray:11 89;opacity:.66}
+.ultron-flow-1{stroke:#ff4e63;stroke-width:1.8;opacity:.7}
+.ultron-flow-2{stroke:#ffb2aa;stroke-width:1.3;opacity:.55}
+.ultron-node{fill:#ffbab1;stroke:none;opacity:.45}
+.life-node{transform-box:fill-box;transform-origin:center}
+#personas-modal[open] .edith-orbit{animation:edith-orbit 17s linear infinite}
+#personas-modal[open] .edith-focus{animation:edith-focus 5.6s ease-in-out infinite}
+#personas-modal[open] .edith-reflection{animation:edith-reflection 6.4s ease-in-out infinite}
+#personas-modal[open] .edith-signal{animation:edith-signal 4.6s ease-in-out infinite}
+#personas-modal[open] .edith-node{animation:life-node 4.2s ease-in-out infinite;animation-delay:var(--life-delay)}
+#personas-modal[open] .ultron-orbit{animation:ultron-orbit 22s linear infinite}
+#personas-modal[open] .ultron-energy{animation:ultron-energy 5.2s ease-in-out infinite}
+#personas-modal[open] .ultron-flow{animation:ultron-current 5.2s linear infinite}
+#personas-modal[open] .ultron-flow-1{animation-duration:6.1s;animation-delay:-2s}
+#personas-modal[open] .ultron-flow-2{animation-duration:4.8s;animation-delay:-3.1s}
+#personas-modal[open] .ultron-node{animation:life-node 3.9s ease-in-out infinite;animation-delay:var(--life-delay)}
+@keyframes edith-orbit{to{stroke-dashoffset:-100}}
+@keyframes edith-focus{0%,100%{transform:translate(-3px,1px);opacity:.48}38%{transform:translate(4px,-2px);opacity:.92}68%{transform:translate(1px,3px);opacity:.68}}
+@keyframes edith-reflection{0%,18%{transform:translateX(-15px);opacity:0}32%{opacity:.58}57%{transform:translateX(30px);opacity:0}100%{transform:translateX(30px);opacity:0}}
+@keyframes edith-signal{0%,100%{stroke-dashoffset:0;opacity:.2}50%{stroke-dashoffset:-14;opacity:.7}}
+@keyframes life-node{0%,100%{opacity:.2;transform:scale(.8)}44%{opacity:.95;transform:scale(1.35)}72%{opacity:.5;transform:scale(1)}}
+@keyframes ultron-orbit{to{stroke-dashoffset:100}}
+@keyframes ultron-energy{0%,100%{opacity:.025;transform:scale(.97)}48%{opacity:.095;transform:scale(1.045)}75%{opacity:.05;transform:scale(1.01)}}
+@keyframes ultron-current{to{stroke-dashoffset:-100}}
+body.no-effects .core-life{display:none!important}
+@media(prefers-reduced-motion:reduce){.core-life{display:none!important}}

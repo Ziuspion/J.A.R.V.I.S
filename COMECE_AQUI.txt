@@ -1,24 +1,17 @@
-FUSION MK XIV
+J.A.R.V.I.S. MK XV
 
-1. Abra JARVIS_FUSION_MK_XIV.html no navegador.
-   Nenhuma instalacao e necessaria para abrir o aplicativo.
+1. Extraia o ZIP completo. No computador, abra JARVIS_MK_XV.html.
+2. Clique em Conectar IA. Escolha um provedor, a chave da sua conta e o modelo.
+3. OpenRouter começa em openrouter/free, com restrição gratuita ativa.
+4. No celular/tablet, prefira a versão publicada por HTTPS.
 
-2. Clique em Conectar IA > OpenRouter.
-   Gere uma chave da sua conta: https://openrouter.ai/settings/keys
-   Cole no campo de conexao, mantenha openrouter/free e conecte.
-   As variantes gratuitas possuem cotas e disponibilidade limitadas.
+Manual: docs/GUIA_COMPLETO_JARVIS_MK_XV.pdf
+Publicação: use JARVIS_MK_XV_PUBLICAR.zip, não este pacote completo.
+Banco opcional: database/supabase_mk_xv.sql, explicado no manual.
+As chaves ficam na memória da aba. Nenhuma chave pessoal acompanha os arquivos.
+A sessão temporária é o padrão. Ative histórico ou exporte para conservar conversas.
 
-3. Escolha JARVIS, Sexta-feira, EDITH ou Ultron e converse.
-   Os quatro usam o modelo conectado, com estilos diferentes.
+Servidor opcional: leia README.md antes de iniciar. O HTML não depende de Python.
+A base inclui bibliotecas reais de PDF/Word/ZIP, com suas licenças.
 
-4. Antes de fechar, use Conversas e dados > Exportar backup.
-   A sessao e temporaria por padrao. Reanexe imagens ao abrir outra sessao.
-
-GUIA COMPLETO: docs/GUIA_ATIVACAO_JARVIS_MK_XIV.pdf
-FONTES E OPCOES: README.md
-
-INICIAR_JARVIS.bat apenas abre o HTML.
-INICIAR_SERVIDOR_OPCIONAL.bat e um modo avancado separado, que exige Python.
-Nao e necessario usar o servidor para conversar pela API diretamente.
-
-Nenhuma chave real acompanha este pacote. Nao compartilhe suas chaves.
+Created using AI by Orlando with assistance, and based on the first version created by Nikolas.

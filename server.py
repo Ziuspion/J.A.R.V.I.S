@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""J.A.R.V.I.S. local. Python 3.10+, sem pip/npm. Inicie com INICIAR_JARVIS.bat."""
+"""Servidor opcional. Python 3.10+, sem pip/npm. Use INICIAR_SERVIDOR_OPCIONAL.bat."""
 from __future__ import annotations
 
 import argparse
@@ -42,7 +42,7 @@ class JarvisServer(ThreadingHTTPServer):
 
 
 class Handler(BaseHTTPRequestHandler):
-    server_version = "JarvisFusion/14"
+    server_version = "JARVIS/15"
 
     def log_message(self, fmt, *args):
         # Apenas método e caminho, nunca querystrings, bodies ou chaves.
@@ -55,7 +55,7 @@ class Handler(BaseHTTPRequestHandler):
         self.send_header("X-Frame-Options", "DENY")
         self.send_header("Cache-Control", "no-store")
         self.send_header("Permissions-Policy", "camera=(), microphone=(self), geolocation=()")
-        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline'; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; connect-src 'self' https: http://127.0.0.1:* http://localhost:*; media-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
+        self.send_header("Content-Security-Policy", "default-src 'self'; script-src 'self' blob: 'unsafe-inline' 'wasm-unsafe-eval'; worker-src 'self' blob:; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob: https:; font-src 'self' data: blob:; connect-src 'self' https: http://127.0.0.1:* http://localhost:* http://[::1]:*; media-src 'self' blob:; object-src 'none'; base-uri 'none'; frame-ancestors 'none'")
         super().end_headers()
 
     def json(self, value, status=200, cookie=None):
@@ -70,7 +70,16 @@ class Handler(BaseHTTPRequestHandler):
 
     def guard(self, mutation=False):
         host = self.headers.get("Host", "")
-        parsed = urlsplit("http://" + host)
+        try:
+            parsed = urlsplit("http://" + host)
+            port = parsed.port
+            valid = bool(host and parsed.hostname and not parsed.username and not parsed.password
+                         and not parsed.path and not parsed.query and not parsed.fragment
+                         and not any(c.isspace() for c in host))
+        except ValueError:
+            valid = False
+        if not valid:
+            raise UserError("Host não permitido.", 403)
         if not self.server.preview and parsed.hostname not in {"127.0.0.1", "localhost", "::1"}:
             raise UserError("Host não permitido.", 403)
         if self.headers.get("Sec-Fetch-Site", "") == "cross-site":
@@ -84,7 +93,7 @@ class Handler(BaseHTTPRequestHandler):
     def body(self):
         if self.headers.get("Transfer-Encoding"):
             raise UserError("Transferência não suportada.")
-        if not self.headers.get("Content-Type", "").startswith("application/json"):
+        if self.headers.get("Content-Type", "").split(";", 1)[0].strip().lower() != "application/json":
             raise UserError("Use application/json.", 415)
         try:
             size = int(self.headers.get("Content-Length", "0"))
@@ -94,7 +103,9 @@ class Handler(BaseHTTPRequestHandler):
             raise UserError("Requisição vazia ou maior que 12 MB.", 413)
         self.connection.settimeout(15)
         try:
-            value = json.loads(self.rfile.read(size))
+            def invalid_constant(_):
+                raise ValueError("Número não finito")
+            value = json.loads(self.rfile.read(size), parse_constant=invalid_constant)
         except (ValueError, UnicodeDecodeError, TimeoutError):
             raise UserError("JSON inválido.") from None
         if not isinstance(value, dict):
@@ -120,7 +131,7 @@ class Handler(BaseHTTPRequestHandler):
             self.guard()
             path = urlsplit(self.path).path
             if path == "/api/health":
-                return self.json({"ok": True, "version": "14.0.0"})
+                return self.json({"ok": True, "version": "15.0.0"})
             if path == "/api/config":
                 value = public_config()
                 value["session"] = self.server.csrf
@@ -161,11 +172,11 @@ class Handler(BaseHTTPRequestHandler):
 
     def static_file(self, path):
         # Allowlist, sem listagem de diretórios. .env, SQLite e código não são servidos.
-        allowed = {"/": "index.html", "/index.html": "index.html", "/JARVIS_FUSION_MK_XIV.html": "JARVIS_FUSION_MK_XIV.html", "/GUIA.html": "docs/GUIA.html", "/GUIA.pdf": "docs/GUIA.pdf", "/favicon.svg": "assets/favicon.svg"}
+        allowed = {"/": "index.html", "/index.html": "index.html", "/JARVIS_FUSION_MK_XIV.html": "JARVIS_MK_XV.html", "/JARVIS_MK_XV.html": "JARVIS_MK_XV.html", "/manifest.webmanifest": "manifest.webmanifest", "/sw.js": "sw.js", "/GUIA.pdf": "docs/GUIA_COMPLETO_JARVIS_MK_XV.pdf", "/favicon.svg": "assets/favicon.svg"}
         relative = allowed.get(path)
-        if not relative and path.startswith(("/assets/", "/modelos/")):
+        if not relative and path.startswith(("/assets/", "/vendor/")):
             suffix = Path(path).suffix.lower()
-            if suffix in {".png", ".webp", ".jpg", ".svg", ".obj", ".mtl"}:
+            if suffix in {".png", ".webp", ".jpg", ".svg", ".js", ".mjs", ".css", ".wasm", ".pfb", ".ttf", ".otf", ".bcmap"}:
                 relative = path.lstrip("/")
         if not relative:
             raise UserError("Arquivo não encontrado.", 404)
@@ -250,6 +261,7 @@ class Handler(BaseHTTPRequestHandler):
     def chat(self, payload):
         if not self.server.ai_slots.acquire(blocking=False):
             raise UserError("Já há duas solicitações de IA em andamento.", 429)
+        generator = None
         try:
             generator = providers.stream_chat(payload)
             # Obtém o primeiro evento antes dos cabeçalhos para retornar erro JSON útil.
@@ -268,11 +280,19 @@ class Handler(BaseHTTPRequestHandler):
                     emit(event)
             except UserError as e:
                 emit({"type": "error", "error": str(e)})
+            except (BrokenPipeError, ConnectionResetError):
+                pass
+            except Exception:
+                # Depois dos cabeçalhos SSE, nunca escreve um segundo status HTTP.
+                emit({"type": "error", "error": "A resposta foi interrompida pelo servidor. Tente novamente."})
             finally:
-                generator.close()
                 self.close_connection = True
         finally:
-            self.server.ai_slots.release()
+            try:
+                if generator is not None:
+                    generator.close()
+            finally:
+                self.server.ai_slots.release()
 
     def authenticate(self, p):
         action = p.get("action")
@@ -350,7 +370,7 @@ def main():
         print(f"A porta {args.port} já está em uso. Feche a outra sessão ou use: python server.py --port 8766")
         return 1
     url = f"http://127.0.0.1:{args.port}"
-    print("\nJ.A.R.V.I.S. FUSION MK XIV / GENERATIVE CORE")
+    print("\nJ.A.R.V.I.S. MK XV / GENERATIVE CORE")
     print("Local:", url)
     print("Provedor do servidor opcional:", public_config()["ai"]["provider"])
     print("Dados locais:", server.store.path)

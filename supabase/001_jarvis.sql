@@ -1,4 +1,4 @@
--- Fusion MK XIV. Integração avançada opcional: execute no SEU projeto Supabase.
+-- J.A.R.V.I.S. MK XV. Integração avançada opcional: execute no SEU projeto Supabase.
 -- Backup por usuário. Nenhuma chave service_role é usada pelo aplicativo.
 begin;
 

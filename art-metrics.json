@@ -1,0 +1,98 @@
+{
+  "iris": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      12,
+      16,
+      1237,
+      1225
+    ],
+    "targetDiameter": 520
+  },
+  "jarvis": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      63,
+      65,
+      1175,
+      1168
+    ],
+    "targetDiameter": 520
+  },
+  "friday": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      61,
+      57,
+      1171,
+      1173
+    ],
+    "targetDiameter": 520
+  },
+  "karen": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      14,
+      18,
+      1235,
+      1222
+    ],
+    "targetDiameter": 520
+  },
+  "edith": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      105,
+      99,
+      1142,
+      1126
+    ],
+    "targetDiameter": 520
+  },
+  "veronica": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      29,
+      37,
+      1210,
+      1214
+    ],
+    "targetDiameter": 520
+  },
+  "ultron": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      53,
+      56,
+      1187,
+      1187
+    ],
+    "targetDiameter": 520
+  },
+  "vision": {
+    "width": 1254,
+    "height": 1254,
+    "alphaThreshold": 40,
+    "bounds": [
+      39,
+      47,
+      1194,
+      1195
+    ],
+    "targetDiameter": 520
+  }
+}
